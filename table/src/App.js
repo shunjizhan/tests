@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-// import { loadStyle, loadScript, loadScriptsAndStyles, loadReact } from './js/helper.js';
-// import 'https://unpkg.com/react-virtualized/styles.css';
-// import 'https://unpkg.com/react-virtualized/dist/umd/react-virtualized.js'
-
-import { AutoSizer, List, Grid, Column, Table } from 'react-virtualized';
+import { Column, Table } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
 class App extends Component {
   render() {
     var list = this.list_generate(50);
-    
+  
     return ( 
       <Table
         width={999}
@@ -41,6 +36,7 @@ class App extends Component {
           width={100}
           label='Color3'
           dataKey='color3'
+          // className={dataKey}
         />
       </Table>
     );

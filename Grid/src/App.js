@@ -2,18 +2,7 @@ import React, { Component } from 'react';
 import { Grid } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
-const list = tableGen(3000, 20);
-
-function cellRenderer ({ columnIndex, key, rowIndex, style }) {
-  return (
-    <div
-      key={key}
-      style={style}
-    >
-      {list[rowIndex][columnIndex]}
-    </div>
-  )  
-}
+// const t = tableGen(30, 10);
 
 function tableGen(row, colume) {
   let table = [];
@@ -38,16 +27,37 @@ function randomColor() {
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: tableGen(30, 10)
+      // data: t
+    };
+    this.cellRenderer = this.cellRenderer.bind(this);
+  }
+
+  cellRenderer ({ columnIndex, key, rowIndex, style }) {
+    return (
+      <div key={key} style={style} >
+        {this.state.data[rowIndex][columnIndex]}
+      </div>
+    );  
+  }
+
   render() {
+    let list = this.state.data;
+     // alert(list);
     return (
        <Grid
-        cellRenderer={cellRenderer}
+        cellRenderer={this.cellRenderer}
         columnCount={list[0].length}      
         columnWidth={50}
         width={list[0].length * 50}
+        // width={500}
         rowCount={list.length}
         rowHeight={20}    
         height={list.length * 20}
+        // height={500}
       />
     );
   }

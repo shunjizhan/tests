@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import './App.css';
+// import './App.css';
 
 import { Column, Table } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
 class App extends Component {
   render() {
-    var list = this.list_generate(50);
-  
+    const list = this.listGenerate(50);
+ 
     return ( 
       <Table
         width={999}
@@ -44,15 +44,15 @@ class App extends Component {
   }
 
   randomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++ ) {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
   }
 
-  object_generate() {
+  objectGenerate() {
     // var color = this.randomColor();
     return { 
       name: 'Kobe', 
@@ -62,10 +62,10 @@ class App extends Component {
     };
   }
 
-  list_generate(num) {
-    var list = [];
-    for(var i = 0; i < num; i++) {
-      list[i] = this.object_generate();
+  listGenerate(num) {
+    let list = [];
+    for(let i = 0; i < num; i++) {
+      list[i] = this.objectGenerate();
     }
     return list;
   }

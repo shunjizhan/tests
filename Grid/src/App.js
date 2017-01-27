@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Grid } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
-const list = tableGen(200, 100);
+const list = tableGen(3000, 20);
 
 function cellRenderer ({ columnIndex, key, rowIndex, style }) {
   return (
@@ -31,7 +31,7 @@ function tableGen(row, colume) {
 function randomColor() {
   const letters = '0123456789ABCDEF';
   let color = '#';
-  for (let i = 0; i < 6; i++ ) {
+  for (let i = 0; i < 3; i++ ) {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
@@ -42,12 +42,12 @@ class App extends Component {
     return (
        <Grid
         cellRenderer={cellRenderer}
-        columnCount={list[0].length}
-        columnWidth={100}
-        height={6000}
+        columnCount={list[0].length}      
+        columnWidth={50}
+        width={list[0].length * 50}
         rowCount={list.length}
-        rowHeight={30}
-        width={10000}
+        rowHeight={20}    
+        height={list.length * 20}
       />
     );
   }

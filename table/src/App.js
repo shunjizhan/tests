@@ -36,7 +36,7 @@ class App extends Component {
           width={100}
           label='Color3'
           dataKey='color3'
-          // className={dataKey}
+          // className={this.props.cellDataGetter()}
         />
       </Table>
     );

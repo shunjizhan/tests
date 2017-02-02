@@ -20,12 +20,12 @@ function reducer(state = [], action) {
 const store = createStore(reducer)
 
 const render = () =>  { 
-	let table = tableGen(10,10)
+	// let table = tableGen(10,10)
 	
 	ReactDOM.render(
 		<App
 			table={ store.getState() }
-			change={ () => store.dispatch({ type: 'CHANGE', table: table }) }
+			change={ () => store.dispatch({ type: 'CHANGE', table: tableGen(10,10) }) }
 		/>,
 		document.getElementById('root')
 	)

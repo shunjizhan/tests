@@ -7,17 +7,6 @@ import 'react-virtualized/styles.css'; // only needs to be imported once
 import './index.css';
 // import Table from './App';
 
-class UpdatingGrid extends Component {
-	render() {
-		return (
-			<Grid 
-				{...this.props}
-			/>
-		)
-	}
-}
-
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +22,8 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-  	if (this.props.table !== prevProps.table) {
+  	console.log(this.props.table)
+  	if (this.table != null && this.props.table !== prevProps.table) {
   		this.table.forceUpdate();
   	}
   }
@@ -41,7 +31,6 @@ class App extends Component {
 
   render() {
     let list = this.props.table;
-    console.log(list);
 
     console.log('table:');
     for(let i = 0; i < list.length; i++) 
@@ -109,6 +98,11 @@ const mapDispatch = dispatch => {
 				type: 'randomTable', 
 				// table: tableGen(rand(10) * 1.5 + 1, rand(10) + 1),
 				table: tableGen(3,3)
+			})
+		},
+		clearTable: () => {
+			dispatch({
+				type: 'clearTable'
 			})
 		}
 	}

@@ -11,9 +11,12 @@ let rand = gen.create(date.getTime())
 
 function reducer(state = [], action) {
 	switch (action.type) {
-		case 'CHANGE':
+		case 'randomTable':
 			// return [["QQQ", "WWW"]]
 			return action.table
+
+		case 'clearTable':
+			return []
 
 		default:
 			return tableGen(3,3)
@@ -22,16 +25,25 @@ function reducer(state = [], action) {
 
 const store = createStore(reducer)
 
-function change(num) {
-	console.log('change')
-	store.dispatch({ type: 'CHANGE', table: tableGen(rand(10) * 1.5 + 1, rand(10) + 1) })
+const randomTable = () => {
+	store.dispatch({ 
+		type: 'randomTable', 
+		table: tableGen(rand(10) * 1.5 + 1, rand(10) + 1),
+	})
+}
+
+const clearTable = () => {
+	store.dispatch({ 
+		type: 'clearTable', 
+	})
 }
 
 const render = () =>  { 
 	ReactDOM.render(
 		<App
 			table={ store.getState() }
-			change={ change  }
+			randomTable={ randomTable }
+			clearTable={ clearTable }
 		/>,
 		document.getElementById('root')
 	)

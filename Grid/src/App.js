@@ -23,26 +23,39 @@ class App extends Component {
     // let list = this.state.data;
     let list = this.props.table;
 
-    for(let i = 0; i < list.length; i++) 
-    	console.log(list[i])
+    // for(let i = 0; i < list.length; i++) 
+    // 	console.log(list[i])
 
-    return (
-      <div>
-         <Grid
-          cellRenderer={this.cellRenderer}
-          columnCount={list[0].length}      
-          columnWidth={50}
-          width={list[0].length * 50}
-          // width={500}
-          rowCount={list.length}
-          rowHeight={20}    
-          height={list.length * 20}
-          // height={500}
-        />
+    if(list[0] != null) {
+	    return (
+	      <div>
+	         <Grid
+	          cellRenderer={this.cellRenderer}
+	          columnCount={list[0].length}      
+	          columnWidth={50}
+	          width={list[0].length * 50}
+	          // width={500}
+	          rowCount={list.length}
+	          rowHeight={20}    
+	          height={list.length * 20}
+	          // height={500}
+	        />
 
-          <button onClick={this.props.change}>random table</button>
-      </div>
-    );
+	        <div id='buttons'>
+	        	<button onClick={this.props.randomTable}>random table</button>
+	        	<button onClick={this.props.clearTable}>clear table</button>
+	        </div>
+	      </div>
+	    );
+	} else {
+		return (
+			<div id='buttons'>
+	        	<button onClick={this.props.randomTable}>random table</button>
+	        	<button onClick={this.props.clearTable}>clear table</button>
+	        </div>
+		)
+	}
+
   }
 }
 

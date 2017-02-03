@@ -31,7 +31,7 @@ class App extends Component {
   cellRenderer ({ columnIndex, key, rowIndex, style }) {
     return (
       <div key={key} style={style} >
-        {this.props.table[rowIndex][columnIndex]}
+        {this.props.table.table[rowIndex][columnIndex]}
       </div>
     );  
   }
@@ -44,7 +44,7 @@ class App extends Component {
   }
 
   render() {
-    let list = this.props.table;
+    let list = this.props.table.table;
     console.log(JSON.stringify(list));
 
     console.log('table:');
@@ -59,16 +59,14 @@ class App extends Component {
 	          columnCount={list[0].length}      
 	          columnWidth={50}
 	          width={list[0].length * 50}
-	          // width={500}
 	          rowCount={list.length}
 	          rowHeight={20}    
 	          height={list.length * 20}
 	          ref={node => this.table = node}
-	          // height={500}
 	        />
 
 	        <div id='buttons'>
-	        	<button onClick={this.props.randomTable}>random table</button>
+	        	<button onClick={this.props.actions.randomTable({ table: tableGen(3,3) })}>random table</button>
 	        	<button onClick={this.props.clearTable}>clear table</button>
 	        </div>
 	      </div>
@@ -85,49 +83,12 @@ class App extends Component {
   }
 }
 
-// move reducer to a file
-// function reducer(state = [], action) {
-// 	switch (action.type) {
-// 		case 'randomTable':
-// 			return action.table
-
-// 		case 'clearTable':
-// 			return []
-
-// 		default:
-// 			return tableGen(3,3)
-// 	}
-// }
-// const store = createStore(reducer, []);
-
-// const mapState = state => {
-// 	return {
-// 		table: state
-// 	}
-// }
-
-// const mapDispatch = dispatch => {
-// 	return {
-// 		randomTable: () => {
-// 			dispatch({ 
-// 				type: 'randomTable', 
-// 				// table: tableGen(rand(10) * 1.5 + 1, rand(10) + 1),
-// 				table: tableGen(3,3)
-// 			})
-// 		},
-// 		clearTable: () => {
-// 			dispatch({
-// 				type: 'clearTable'
-// 			})
-// 		}
-// 	}
-// }
-const store = createStore(tableModule.reducer, {});
+const store = createStore(tableModule.reducer);
+// const store = createStore(tableModule.reducer, tableModule.reducer(undefined, { type: '' }));
 
 const Table = connectModule(tableModule)(App);
 
 ReactDOM.render(
-	// wrap this in provider, put store in the react context
 	<Provider store={store}>
 		<Table />
 	</Provider>,

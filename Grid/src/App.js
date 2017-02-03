@@ -32,7 +32,6 @@ const mapDispatch = dispatch => {
 	randomTable: () => {
 		dispatch({ 
 			type: 'randomTable', 
-			// table: tableGen(rand(10) * 1.5 + 1, rand(10) + 1),
 			table: tableGen(3,3)
 		})
 	}
@@ -41,9 +40,7 @@ const mapDispatch = dispatch => {
 class App extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   data: tableGen(30, 10)
-    // };
+    sdasd
     this.cellRenderer = this.cellRenderer.bind(this);
   }
 

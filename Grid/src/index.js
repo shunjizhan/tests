@@ -1,11 +1,26 @@
 import ReactDOM from 'react-dom';
 import React, { Component } from 'react';
-import { connect, Provider } from 'react-redux'
+import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import { Grid } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 import './index.css';
 // import Table from './App';
+
+import { createModule, connectModule } from 'redux-modules';
+
+const tableModule = createModule({
+	name: 'table',
+	initialState: {table: tableGen(3,3)},
+	selector: state => ({ table: state }),
+	transformations: {
+		randomTable: {
+			reducer: (state, { payload }) => {
+				return (state.update('table', table => payload));
+			}
+		},
+	}
+}); 
 
 class App extends Component {
   constructor(props) {
@@ -28,9 +43,9 @@ class App extends Component {
   	}
   }
 
-
   render() {
     let list = this.props.table;
+    console.log(JSON.stringify(list));
 
     console.log('table:');
     for(let i = 0; i < list.length; i++) 
@@ -71,44 +86,45 @@ class App extends Component {
 }
 
 // move reducer to a file
-function reducer(state = [], action) {
-	switch (action.type) {
-		case 'randomTable':
-			return action.table
+// function reducer(state = [], action) {
+// 	switch (action.type) {
+// 		case 'randomTable':
+// 			return action.table
 
-		case 'clearTable':
-			return []
+// 		case 'clearTable':
+// 			return []
 
-		default:
-			return tableGen(3,3)
-	}
-}
-const store = createStore(reducer, []);
+// 		default:
+// 			return tableGen(3,3)
+// 	}
+// }
+// const store = createStore(reducer, []);
 
-const mapState = state => {
-	return {
-		table: state
-	}
-}
+// const mapState = state => {
+// 	return {
+// 		table: state
+// 	}
+// }
 
-const mapDispatch = dispatch => {
-	return {
-		randomTable: () => {
-			dispatch({ 
-				type: 'randomTable', 
-				// table: tableGen(rand(10) * 1.5 + 1, rand(10) + 1),
-				table: tableGen(3,3)
-			})
-		},
-		clearTable: () => {
-			dispatch({
-				type: 'clearTable'
-			})
-		}
-	}
-}
+// const mapDispatch = dispatch => {
+// 	return {
+// 		randomTable: () => {
+// 			dispatch({ 
+// 				type: 'randomTable', 
+// 				// table: tableGen(rand(10) * 1.5 + 1, rand(10) + 1),
+// 				table: tableGen(3,3)
+// 			})
+// 		},
+// 		clearTable: () => {
+// 			dispatch({
+// 				type: 'clearTable'
+// 			})
+// 		}
+// 	}
+// }
+const store = createStore(tableModule.reducer, {});
 
-const Table = connect(mapState, mapDispatch)(App);
+const Table = connectModule(tableModule)(App);
 
 ReactDOM.render(
 	// wrap this in provider, put store in the react context

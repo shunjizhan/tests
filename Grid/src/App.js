@@ -23,6 +23,9 @@ class App extends Component {
     // let list = this.state.data;
     let list = this.props.table;
 
+    for(let i = 0; i < list.length; i++) 
+    	console.log(list[i])
+
     return (
       <div>
          <Grid
@@ -37,7 +40,7 @@ class App extends Component {
           // height={500}
         />
 
-          <button onClick={this.props.change}>change</button>
+          <button onClick={this.props.change}>random table</button>
       </div>
     );
   }

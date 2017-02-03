@@ -6,26 +6,32 @@ import './index.css';
 import { createStore } from 'redux'
 
 let gen = require('random-seed');
+let date = new Date();
+let rand = gen.create(date.getTime())
 
 function reducer(state = [], action) {
 	switch (action.type) {
 		case 'CHANGE':
-		return action.table;
+			// return [["QQQ", "WWW"]]
+			return action.table
 
 		default:
-		return tableGen(10,10)
+			return tableGen(3,3)
 	}
 }
 
 const store = createStore(reducer)
 
+function change(num) {
+	console.log('change')
+	store.dispatch({ type: 'CHANGE', table: tableGen(rand(10) * 1.5 + 1, rand(10) + 1) })
+}
+
 const render = () =>  { 
-	// let table = tableGen(10,10)
-	
 	ReactDOM.render(
 		<App
 			table={ store.getState() }
-			change={ () => store.dispatch({ type: 'CHANGE', table: tableGen(10,10) }) }
+			change={ change  }
 		/>,
 		document.getElementById('root')
 	)
@@ -51,9 +57,6 @@ function tableGen(row, colume) {
 }
 
 function randomColor() {
-	let date = new Date();
-	let rand = gen.create(date.getTime())
-
 	const letters = '0123456789ABCDEF';
 	let color = '#';
 	for (let i = 0; i < 3; i++ ) {

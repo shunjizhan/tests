@@ -12,11 +12,11 @@ import { createModule, connectModule } from 'redux-modules';
 const tableModule = createModule({
 	name: 'table',
 	initialState: {table: tableGen(3,3)},
-	selector: state => ({ table: state }),
+	selector: state => state,
 	transformations: {
 		randomTable: {
 			reducer: (state, { payload }) => {
-				return (state.update('table', table => payload));
+				return payload;
 			}
 		},
 	}
@@ -31,21 +31,20 @@ class App extends Component {
   cellRenderer ({ columnIndex, key, rowIndex, style }) {
     return (
       <div key={key} style={style} >
-        {this.props.table.table[rowIndex][columnIndex]}
+        {this.props.table[rowIndex][columnIndex]}
       </div>
     );  
   }
 
   componentDidUpdate(prevProps, prevState) {
-  	console.log(this.props.table)
+  	// console.log(this.props.table)
   	if (this.table != null && this.props.table !== prevProps.table) {
   		this.table.forceUpdate();
   	}
   }
 
   render() {
-    let list = this.props.table.table;
-    console.log(JSON.stringify(list));
+    let list = this.props.table;
 
     console.log('table:');
     for(let i = 0; i < list.length; i++) 
@@ -66,16 +65,16 @@ class App extends Component {
 	        />
 
 	        <div id='buttons'>
-	        	<button onClick={this.props.actions.randomTable({ table: tableGen(3,3) })}>random table</button>
-	        	<button onClick={this.props.clearTable}>clear table</button>
+	        	<button onClick={ () => this.props.actions.randomTable({ table: tableGen(3,3) }) }>random table</button>
+	        	<button onClick={ () => this.props.actions.randomTable({ table: [] }) }>clear table</button>
 	        </div>
 	      </div>
 	    );
 	} else {
 		return (
 			<div id='buttons'>
-	        	<button onClick={this.props.randomTable}>random table</button>
-	        	<button onClick={this.props.clearTable}>clear table</button>
+	        	<button onClick={ () => this.props.actions.randomTable({ table: tableGen(3,3) }) }>random table</button>
+	        	<button onClick={ () => this.props.actions.randomTable({ table: [] }) }>clear table</button>
 	        </div>
 		)
 	}

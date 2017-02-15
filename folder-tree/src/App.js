@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { connect, Provider } from 'react-redux'
 
-import TreeNode from './folder'
+import TreeNode from './TreeNode'
 
 class App extends Component {
   // constructor(props) {
@@ -12,8 +12,9 @@ class App extends Component {
   render() {
     return (
       <div>
-        <TreeNode catagory='folder'/>
-        <TreeNode catagory='file'/>
+        <TreeNode catagory='folder' level={0}/>
+        <TreeNode catagory='folder' level={1}/>
+        <TreeNode catagory='file' level={1}/>
       </div>
     )
 

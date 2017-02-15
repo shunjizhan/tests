@@ -5,7 +5,10 @@ body {
 }
 
 .file {
-	font-size: 80%;
+	/* font-size: 80%; */
+}
+
+.file, .folder {
 	white-space: pre-wrap;
 }
 

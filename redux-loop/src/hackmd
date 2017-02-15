@@ -1,0 +1,62 @@
+1,
+The standard action shape is:
+{
+  type: 'actionName',
+  payload: // action payload, eg your array of table data,
+  meta: // meta information
+}
+reference: https://github.com/acdlite/flux-standard-action
+
+
+2,
+The argument you call the action with becomes the payload.
+/***** EXAMPLE 1 *****/
+// module.js
+reducer: (state, { payload }) => {
+	return (state.update('table', table => payload));
+}
+// App.jsx
+<button onClick={() => this.props.actions.random( tableGen(3, 3 )}>
+</button>
+
+/***** EXAMPLE 2 *****/
+// module.js
+reducer: (state, { payload }) => {
+	return (state.update('table', table => payload.table));
+}
+// App.jsx
+<button onClick={() => this.props.actions.random({table: tableGen(3, 3 )}}>
+</button>
+
+
+3,
+npm install --save dependency-name will add dependencies to package.json
+
+
+4,
+if we have: 
+	initialState: {table: tableGen(3,3)},
+then we can omit the second argument in createStore: 
+	const store = createStore(tableModule.reducer);
+
+
+5, 
+pass a wrapper function in view:
+		        	<button onClick={ () => this.props.actions.randomTable({ table: tableGen(3,3) }) }>random table</button>
+but not:
+		        	<button onClick={ this.props.actions.randomTable({ table: tableGen(3,3) }) }>random table</button>
+
+
+6,
+state.update is part of the `Immutable` api, but sometimes it is not neccesary:
+	reducer: (state, { payload }) => {
+		return payload;		// can return payload directly
+	}
+
+
+
+
+
+
+
+

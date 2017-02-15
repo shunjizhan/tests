@@ -16,6 +16,7 @@ class Tree extends Component {
  	render() {
  			return (
 	      <TreeNode 
+	      	className="treeRoot"
 	      	key={this.state.data.id} 
 	      	catagory={this.state.data.catagory} 
 	      	filename={this.state.data.filename} 
@@ -39,10 +40,23 @@ class TreeNode extends Component {
 
 	constructor(props) {
     super(props);
+    this.toggleSelect = this.toggleSelect.bind(this);
     this.state = {
     	children: props.children,
     	level: props.level
     };
+  }
+
+  toggleSelect() {
+  	if (this.state.children.length > 0) {
+  		this.setState({
+  			children: []
+  		});
+  	}	else {
+  		this.setState({
+  			children: this.props.children,
+  		});
+  	}
   }
 
 	getInden() {
@@ -54,17 +68,13 @@ class TreeNode extends Component {
 		return iden;
 	}
 
-	handleClick(e) {
-		console.log('clicked!!')
-	}
-
  	render() {
  		// console.log('render')
  		if (this.props.catagory === 'folder') {
 	 		return (
 	      <div className='folder'>
 	      	{this.getInden()}
-	      	<a onClick={this.handleClick}>
+	      	<a onClick={this.toggleSelect}>
 		        <input type="checkbox" id="cbox1" value="first_checkbox" />
 		        <FontAwesome name='folder-o'/> {this.props.filename}
 	        </a>

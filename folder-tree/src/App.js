@@ -125,7 +125,9 @@ class App extends Component {
 
   render() {
     return (
-      <Tree data={data} />
+      <div className='folder-tree'>
+        <Tree data={data} />
+      </div>
     )
 
   }

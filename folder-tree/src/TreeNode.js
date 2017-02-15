@@ -9,6 +9,7 @@ class Tree extends Component {
 	constructor(props) {
     super(props);
     this.state = {
+    	open: false,
     	data: props.data,
     	selectedFolders: []	// array of object
     };
@@ -50,10 +51,12 @@ class TreeNode extends Component {
   toggleFolder(e) {
   	if (this.state.children.length > 0) {
   		this.setState({
+  			open: false,
   			children: []
   		});
   	}	else {
   		this.setState({
+  			open: true,
   			children: this.props.children,
   		});
   	}  	
@@ -76,7 +79,7 @@ class TreeNode extends Component {
 	      	{this.getInden()}
 	      	<input type="checkbox"/>
 	      	<a onClick={this.toggleFolder}>
-		        <FontAwesome name='folder'/> {this.props.filename}
+		        <FontAwesome name={this.state.open? 'folder-open': 'folder'}/> {this.props.filename}
 	        </a>
 	        <ul>{
 	        	this.state.children.map( child => {

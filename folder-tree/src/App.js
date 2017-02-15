@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { connect, Provider } from 'react-redux'
 
-import FontAwesome from 'react-fontawesome';
+import { Folder, File } from './folder'
 
 class App extends Component {
   // constructor(props) {
@@ -12,9 +12,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <input type="checkbox" id="cbox1" value="first_checkbox" />
-        <FontAwesome name='folder-o'/><br />
-        <FontAwesome name='file-o'/>
+        <Folder />
+        <File />
       </div>
     )
 

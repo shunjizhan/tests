@@ -33,7 +33,7 @@ class Tree extends Component {
 
 class TreeNode extends Component {
 	static propTypes = {
-  	category: React.PropTypes.string.isRequired,	// doesn't five warning?g
+  	category: React.PropTypes.string.isRequired,	
   	filename: React.PropTypes.string.isRequired,
   	level: React.PropTypes.number.isRequired,
   	children: React.PropTypes.array.isRequired
@@ -48,7 +48,7 @@ class TreeNode extends Component {
     };
   }
 
-  toggleFolder(e) {
+  toggleFolder() {
   	if (this.state.children.length > 0) {
   		this.setState({
   			open: false,
@@ -62,6 +62,15 @@ class TreeNode extends Component {
   	}  	
   }
 
+  handleCheck(e) {
+  	console.log(e)
+  	if (e.checked) {
+  		console.log('check')
+  	} else {
+  		console.log('uncheck')
+  	}
+  }
+
 	getInden() {
 		let iden = '', i = 0;
 		while (i < this.state.level) {
@@ -72,12 +81,11 @@ class TreeNode extends Component {
 	}
 
  	render() {
- 		// console.log('render')
  		if (this.props.category === 'folder') {
 	 		return (
 	      <div className='folder'>
 	      	{this.getInden()}
-	      	<input type="checkbox"/>
+	      	<input type="checkbox" onClick={this.handleCheck} />
 	      	<a onClick={this.toggleFolder}>
 		        <FontAwesome name={this.state.open? 'folder-open': 'folder'}/> {this.props.filename}
 	        </a>

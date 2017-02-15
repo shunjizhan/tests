@@ -16,4 +16,8 @@ body {
 	cursor: pointer;
 }
 
+.file ul, .folder ul {
+	margin: 0;
+}
+
 

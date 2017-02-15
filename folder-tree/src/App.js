@@ -1,7 +1,104 @@
 import React, { Component } from 'react';
 // import { connect, Provider } from 'react-redux'
 
-import TreeNode from './TreeNode'
+import Tree from './TreeNode'
+
+var data = {
+  "id": 1,
+  "filename": "All Categories",
+  "catagory": "folder",
+  "children": [
+    {
+      "id": 2,
+      "filename": "For Sale",
+      "catagory": "folder",
+      "children": [
+        {
+          "id": 3,
+          "filename": "Audio & Stereo",
+          "catagory": "file"
+        },
+        {
+          "id": 4,
+          "filename": "Baby & Kids Stuff",
+          "catagory": "file"
+        },
+        {
+          "id": 5,
+          "filename": "Music, Films, Books & Games",
+          "catagory": "file"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "filename": "Motors",
+      "catagory": "folder",
+      "children": [
+        {
+          "id": 7,
+          "filename": "Car Parts & Accessories",
+          "catagory": "file"
+        },
+        {
+          "id": 8,
+          "filename": "Cars",
+          "catagory": "file"
+        },
+        {
+          "id": 13,
+          "filename": "Motorbike Parts & Accessories",
+          "catagory": "file"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "filename": "Jobs",
+      "catagory": "folder",
+      "children": [
+        {
+          "id": 10,
+          "filename": "Accountancy",
+          "catagory": "file"
+        },
+        {
+          "id": 11,
+          "filename": "Financial Services & Insurance",
+          "catagory": "file"
+        },
+        {
+          "id": 12,
+          "filename": "Bar Staff & Management",
+          "catagory": "file"
+        }
+      ]
+    }
+  ]
+}
+
+data = {
+      "id": 9,
+      "filename": "Jobs",
+      "catagory": "folder",
+      "children": [
+        {
+          "id": 10,
+          "filename": "Accountancy",
+          "catagory": "file"
+        },
+        {
+          "id": 11,
+          "filename": "Financial Services & Insurance",
+          "catagory": "file"
+        },
+        {
+          "id": 12,
+          "filename": "Bar Staff & Management",
+          "catagory": "file"
+        }
+      ]
+    }
 
 class App extends Component {
   // constructor(props) {
@@ -11,11 +108,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <TreeNode catagory='folder' level={0}/>
-        <TreeNode catagory='folder' level={1}/>
-        <TreeNode catagory='file' level={1}/>
-      </div>
+      <Tree data={data} />
     )
 
   }

@@ -40,14 +40,14 @@ class TreeNode extends Component {
 
 	constructor(props) {
     super(props);
-    this.toggleSelect = this.toggleSelect.bind(this);
+    this.toggleFolder = this.toggleFolder.bind(this);
     this.state = {
     	children: props.children,
     	level: props.level
     };
   }
 
-  toggleSelect() {
+  toggleFolder() {
   	if (this.state.children.length > 0) {
   		this.setState({
   			children: []
@@ -57,6 +57,10 @@ class TreeNode extends Component {
   			children: this.props.children,
   		});
   	}
+  }
+
+  openFile() {
+  	console.log('open file!')
   }
 
 	getInden() {
@@ -74,8 +78,8 @@ class TreeNode extends Component {
 	 		return (
 	      <div className='folder'>
 	      	{this.getInden()}
-	      	<a onClick={this.toggleSelect}>
-		        <input type="checkbox" id="cbox1" value="first_checkbox" />
+	      	<input type="checkbox" id="cbox1" value="first_checkbox" />
+	      	<a onClick={this.toggleFolder}>
 		        <FontAwesome name='folder-o'/> {this.props.filename}
 	        </a>
 	        <ul>{
@@ -97,7 +101,7 @@ class TreeNode extends Component {
  			return (
 	      <div className='file'>
 	        {this.getInden() + '    '}
-	        <a onClick={this.handleClick}>
+	        <a onClick={this.openFile}>
 		        <FontAwesome name='file-o'/> {this.props.filename}
 	        </a>
 	      </div>

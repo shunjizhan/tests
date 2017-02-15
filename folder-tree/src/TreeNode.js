@@ -11,7 +11,7 @@ class TreeNode extends Component {
   }
 
 	propTypes: {
-  	catagory: React.PropTypes.string.isRequired	// doesn't five warning?
+  	catagory: React.PropTypes.string.isRequired	// doesn't five warning?g
 	};
 
 	getInden() {
@@ -23,26 +23,33 @@ class TreeNode extends Component {
 		return iden;
 	}
 
+	handleClick(e) {
+		console.log('clicked!!')
+	}
+
  	render() {
  		if (this.props.catagory === 'folder') {
 	 		return (
 	      <div className='folder'>
 	      	{this.getInden()}
-	        <input type="checkbox" id="cbox1" value="first_checkbox" />
-	        <FontAwesome name='folder-o'/>{this.props.filename}
+	      	<a onClick={this.handleClick}>
+		        <input type="checkbox" id="cbox1" value="first_checkbox" />
+		        <FontAwesome name='folder-o'/>{this.props.filename}
+	        </a>
 	      </div>
 	    )
  		} else {
  			return (
 	      <div className='file'>
 	        {this.getInden()}
-	        <FontAwesome name='file-o'/>{this.props.filename}
+	        <a onClick={this.handleClick}>
+		        <FontAwesome name='file-o'/>{this.props.filename}
+	        </a>
 	      </div>
 	    )
  		}
 
   }
 }
-
 
 export default TreeNode;

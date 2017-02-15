@@ -12,4 +12,8 @@ body {
 	white-space: pre-wrap;
 }
 
+.file:hover, .folder:hover {
+	cursor: pointer;
+}
+
 

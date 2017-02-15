@@ -4,28 +4,22 @@ body {
   font-family: sans-serif;
 }
 
-.file {
-	/* font-size: 80%; */
-}
-
 .file, .folder {
 	white-space: pre-wrap;
 }
 
-.file:hover, .folder:hover {
+/* .folder:hover {
+	border: 1px solid red;
 	cursor: pointer;
-}
+} */
 
 .file ul, .folder ul {
 	margin: 0;
 }
 
-.treeRoot {
+/* .node:hover {
+	border: 1px solid black;
+} */
 
-}
-
-.treeRoot{
-	display: none;
-}
 
 

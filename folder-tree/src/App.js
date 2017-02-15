@@ -1,135 +1,87 @@
 import React, { Component } from 'react';
-// import { connect, Provider } from 'react-redux'
-
 import Tree from './TreeNode'
 
 var data = {
   "id": 1,
   "filename": "All Categories",
-  "catagory": "folder",
+  "category": "folder",
   "children": [
     {
       "id": 2,
       "filename": "For Sale",
-      "catagory": "folder",
+      "category": "folder",
       "children": [
         {
           "id": 3,
           "filename": "Audio & Stereo",
-          "catagory": "file"
+          "category": "file"
         },
         {
           "id": 4,
           "filename": "Baby & Kids Stuff",
-          "catagory": "file"
+          "category": "file"
         },
         {
           "id": 5,
           "filename": "Music, Films, Books & Games",
-          "catagory": "file"
+          "category": "file"
         }
       ]
     },
     {
       "id": 6,
       "filename": "Motors",
-      "catagory": "folder",
+      "category": "folder",
       "children": [
         {
           "id": 7,
           "filename": "Car Parts & Accessories",
-          "catagory": "file"
+          "category": "file"
         },
         {
           "id": 8,
           "filename": "Cars",
-          "catagory": "file"
+          "category": "file"
         },
         {
           "id": 13,
           "filename": "Motorbike Parts & Accessories",
-          "catagory": "file"
+          "category": "file"
         }
       ]
     },
     {
       "id": 9,
       "filename": "Jobs",
-      "catagory": "folder",
+      "category": "folder",
       "children": [
         {
           "id": 10,
           "filename": "Accountancy",
-          "catagory": "file"
+          "category": "file"
         },
         {
           "id": 11,
           "filename": "Financial Services & Insurance",
-          "catagory": "file"
+          "category": "file"
         },
         {
           "id": 12,
           "filename": "Bar Staff & Management",
-          "catagory": "file"
+          "category": "file"
         }
       ]
     }
   ]
 }
 
-// data = {
-//       "id": 1,
-//       "filename": "Jobs",
-//       "catagory": "folder",
-//       "children": [
-//           {
-//             "id": 2,
-//             "filename": "Accountancy",
-//             "catagory": "folder",
-//             "children": [
-//                 {
-//                   "id": 3,
-//                   "filename": "Accountancy",
-//                   "catagory": "file",
-//                 },
-//                 {
-//                   "id": 4,
-//                   "filename": "Financial Services & Insurance",
-//                   "catagory": "file"
-//                 },
-//                 {
-//                   "id": 5,
-//                   "filename": "Bar Staff & Management",
-//                   "catagory": "file"
-//                 }
-//               ]
-//         },
-//         {
-//           "id": 6,
-//           "filename": "Financial Services & Insurance",
-//           "catagory": "file"
-//         },
-//         {
-//           "id": 7,
-//           "filename": "Bar Staff & Management",
-//           "catagory": "file"
-//         }
-//       ]
-//     }
-
 class App extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.cellRenderer = this.cellRenderer.bind(this);
-  // }
-
   render() {
     return (
       <div className='folder-tree'>
-        <Tree data={data} />
+        <Tree data={data} onChange={selectedFolders => console.log(selectedFolders)} />
       </div>
     )
-
   }
 }
 

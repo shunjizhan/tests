@@ -5,12 +5,8 @@ class Tree extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-    	data: {}
+    	data: props.data
     };
-  }
-
-  componentWillMount() {
-    this.setState({data: this.props.data});
   }
 
   propTypes: {
@@ -19,7 +15,13 @@ class Tree extends Component {
 
  	render() {
  			return (
-	      <TreeNode catagory={this.state.data.catagory} filename={this.state.data.filename} children={this.state.data.children} />
+	      <TreeNode 
+	      	key={this.state.data.id} 
+	      	catagory={this.state.data.catagory} 
+	      	filename={this.state.data.filename} 
+	      	children={this.state.data.children} 
+	      	level={0} 
+	      />
 	    )
 	}
 }
@@ -38,21 +40,15 @@ class TreeNode extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-    	children: [],
-    	level: 0
+    	children: props.children,
+    	level: props.level
     };
-  }
-
-  componentWillMount() {
-    this.setState({
-    	children: this.props.children
-    });
   }
 
 	getInden() {
 		let iden = '', i = 0;
 		while (i < this.state.level) {
-			iden += '	'
+			iden += ' '
 			i++
 		}
 		return iden;
@@ -63,6 +59,7 @@ class TreeNode extends Component {
 	}
 
  	render() {
+ 		// console.log('render')
  		if (this.props.catagory === 'folder') {
 	 		return (
 	      <div className='folder'>
@@ -72,8 +69,16 @@ class TreeNode extends Component {
 		        <FontAwesome name='folder-o'/> {this.props.filename}
 	        </a>
 	        <ul>{
-	        	this.state.children.map( node => {
-	        	return <TreeNode key={node.id} catagory={node.catagory} filename={node.filename} level={this.state.level + 1} children={this.state.children} />
+	        	this.state.children.map( child => {
+		        	return (
+		        		<TreeNode 
+				        	key={child.id} 
+				        	catagory={child.catagory} 
+				        	filename={child.filename} 
+				        	level={this.state.level + 1} 
+				        	children={child.children} 
+			        	/>
+			        )
 	        })}</ul>
 
 	      </div>

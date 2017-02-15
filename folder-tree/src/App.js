@@ -77,28 +77,45 @@ var data = {
   ]
 }
 
-data = {
-      "id": 9,
-      "filename": "Jobs",
-      "catagory": "folder",
-      "children": [
-        {
-          "id": 10,
-          "filename": "Accountancy",
-          "catagory": "file"
-        },
-        {
-          "id": 11,
-          "filename": "Financial Services & Insurance",
-          "catagory": "file"
-        },
-        {
-          "id": 12,
-          "filename": "Bar Staff & Management",
-          "catagory": "file"
-        }
-      ]
-    }
+// data = {
+//       "id": 1,
+//       "filename": "Jobs",
+//       "catagory": "folder",
+//       "children": [
+//           {
+//             "id": 2,
+//             "filename": "Accountancy",
+//             "catagory": "folder",
+//             "children": [
+//                 {
+//                   "id": 3,
+//                   "filename": "Accountancy",
+//                   "catagory": "file",
+//                 },
+//                 {
+//                   "id": 4,
+//                   "filename": "Financial Services & Insurance",
+//                   "catagory": "file"
+//                 },
+//                 {
+//                   "id": 5,
+//                   "filename": "Bar Staff & Management",
+//                   "catagory": "file"
+//                 }
+//               ]
+//         },
+//         {
+//           "id": 6,
+//           "filename": "Financial Services & Insurance",
+//           "catagory": "file"
+//         },
+//         {
+//           "id": 7,
+//           "filename": "Bar Staff & Management",
+//           "catagory": "file"
+//         }
+//       ]
+//     }
 
 class App extends Component {
   // constructor(props) {

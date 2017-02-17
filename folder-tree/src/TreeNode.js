@@ -37,7 +37,7 @@ class TreeNode extends Component {
   	filename: React.PropTypes.string.isRequired,
   	level: React.PropTypes.number.isRequired,
   	children: React.PropTypes.array.isRequired
-	}
+	};
 
 	constructor(props) {
     super(props);
@@ -63,9 +63,8 @@ class TreeNode extends Component {
   }
 
   handleCheck(e) {
-  	console.log(e)
-  	if (e.checked) {
-  		console.log('check')
+  	if (e.target.checked) {
+  		console.log('checked')
   	} else {
   		console.log('uncheck')
   	}
@@ -85,7 +84,7 @@ class TreeNode extends Component {
 	 		return (
 	      <div className='folder'>
 	      	{this.getInden()}
-	      	<input type="checkbox" onClick={this.handleCheck} />
+	      	<label><input type="checkbox" onClick={this.handleCheck} /></label>
 	      	<a onClick={this.toggleFolder}>
 		        <FontAwesome name={this.state.open? 'folder-open': 'folder'}/> {this.props.filename}
 	        </a>

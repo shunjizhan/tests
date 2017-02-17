@@ -24,6 +24,7 @@ class Tree extends Component {
 	      	filename={this.state.data.filename} 
 	      	children={this.state.data.children} 
 	      	level={0} 
+	      	checked={0}
 	      />
 	    )
 	}
@@ -36,14 +37,16 @@ class TreeNode extends Component {
   	category: React.PropTypes.string.isRequired,	
   	filename: React.PropTypes.string.isRequired,
   	level: React.PropTypes.number.isRequired,
-  	children: React.PropTypes.array.isRequired
+  	children: React.PropTypes.array.isRequired,
+  	checked: React.PropTypes.number.isRequired
 	};
 
 	constructor(props) {
     super(props);
     this.toggleFolder = this.toggleFolder.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
     this.state = {
-    	checked: 0,
+    	checked: props.checked,
     	children: [],
     	level: props.level
     };
@@ -64,13 +67,21 @@ class TreeNode extends Component {
   }
 
   handleCheck(e) {
+  	// console.log(this)
   	if (e.target.checked) {
+  		this.setState({checked : 1});
   		console.log('checked');
   		// e.target.checked = false;
   	} else {
+  		this.setState({checked : 0});
   		console.log('uncheck');
   		// e.target.checked = true;
   	}
+  }
+
+  componentWillReceiveProps(nextProps) {
+  	console.log(nextProps.checked)
+  	this.setState({checked: nextProps.checked});
   }
 
 	getInden() {
@@ -82,15 +93,19 @@ class TreeNode extends Component {
 		return iden;
 	}
 
+
+
 	getCheckBox() {
 		if (this.state.checked === 0) {
-			return <input type="checkbox" onClick={this.handleCheck} />
+			console.log('this.state.checked === 0')
+			return <input type="checkbox" onClick={this.handleCheck} checked={false}/>
 		} else {
-			return <input type="checkbox" onClick={this.handleCheck} defaultChecked/>
+			return <input type="checkbox" onClick={this.handleCheck} checked={true}/>
 		}
 	}
 
  	render() {
+ 		console.log('render')
  		if (this.props.category === 'folder') {
 	 		return (
 	      <div className='folder'>
@@ -108,7 +123,8 @@ class TreeNode extends Component {
 				        	category={child.category} 
 				        	filename={child.filename} 
 				        	level={this.state.level + 1} 
-				        	children={child.children? child.children: []} 
+				        	children={child.children? child.children : []} 
+				        	checked={this.state.checked}
 			        	/>
 			        )
 	        })}</ul>

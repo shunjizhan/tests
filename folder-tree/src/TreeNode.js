@@ -10,7 +10,7 @@ class Tree extends Component {
     super(props);
     this.state = {
     	data: props.data,
-    	childrenCheck:[],
+    	childrenChecked:[],
     	selectedFolders: []	// array of object
     };
   }
@@ -27,6 +27,7 @@ class Tree extends Component {
 	      	level={0} 
 	      	checked={0}
 	      	setCheck={() => {}}
+	      	tellParent={() => {}}
 	      />
 	    )
 	}
@@ -71,38 +72,71 @@ class TreeNode extends Component {
   componentWillReceiveProps(nextProps) {
   	this.setState({
   		checked: nextProps.checked,
-  		childrenCheck: nextProps.checked? nextProps.children.length : 0
+  		childrenChecked: nextProps.checked? this.getFolderNum(nextProps.children.length) : 0
   	});
   }
 
   handleCheck(e) {
+  	console.log('handleCheck ')
   	if (e.target.checked) {
-  		this.setState({ checked : 1, childrenCheck: this.props.children.length });
+  		console.log('checked!')
+  		// console.log('childrens length: ' + this.getFolderNum(this.props.children) )
+  		this.setState({ 
+  			checked : 1, 
+  			childrenChecked: this.getFolderNum(this.props.children) 
+  		});
   		this.props.tellParent(1);
+  		this.props.setCheck(0.6);
   	}	else {
-  		this.setState({ checked : 0 });
+  		this.setState({ 
+  			checked : 0,
+  			childrenChecked: 0 
+  		});
   		this.props.tellParent(-1);
+  		this.props.setCheck(0.4);
   	}
-  	this.props.setCheck(0.5);		// half check
+
+  			// half check
   }
 
 	setCheck(status) {							// mainly for children's use
-		if (status === 0) 
-			this.checkBox.checked = false;
-		else if (status === 0.5)
+		console.log('setCheck ' + status)
+		if (status === 0) {
+			this.setState ({checked : 0});
+  		this.checkBox.indeterminate = false;
+  	} else if (status === 0.4) {						// uncheck children
   		this.checkBox.indeterminate = true;
-  	else if (status === 1)
-  		this.checkBox.checked = true;
-  	else 
+  		this.setState ({checked : 0});
+		} else if (status === 0.6) {						// check children
+  		this.checkBox.indeterminate = true;
+  		this.setState ({checked : 1});
+		} else if (status === 1) {
+  		this.setState ({checked : 1});
+  		this.checkBox.indeterminate = false;
+  	} else 
   		console.log('check status error!')
   }
 
   updateChildrenChecked(num) {		// update childrenCheck count when children updates
-		this.setState({childrenChecked: this.state.childrenChecked + num});		
-		if (this.state.childrenChecked === 0) 
+  	console.log('updateChildrenChecked ' + num)
+
+		this.setState({childrenChecked: this.state.childrenChecked + num});	
+
+		if (this.state.childrenChecked === 0 ) {
+			console.log('00000')
 			this.setCheck(0);
-		else if (this.state.childrenChecked === this.state.children.length) 
+		} else if (this.state.childrenChecked === this.getFolderNum(this.state.children.length) ) {
+			console.log('11111')
 			this.setCheck(1);
+		}
+  }
+
+  getFolderNum(array) {
+  	let count = 0;
+  	for (let i = 0; i < array.length; i++)
+  		if (array[i].category === 'folder')
+  			count++;
+  	return count;
   }
 
   // getChildrenChecked(child) {
@@ -137,7 +171,7 @@ class TreeNode extends Component {
 				        	checked={this.state.checked}
 
 				        	children={child.children? child.children : []}
-				        	childrenStatus={child.children? getStatusArray(child.children.length, this.state.checked) : []} 
+				        	childrenStatus={child.children? getStatusArray(this.getFolderNum(child.children.length), this.state.checked) : []} 
 				        	
 				        	setCheck={this.setCheck}
 				        	tellParent={this.updateChildrenChecked}

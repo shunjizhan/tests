@@ -40,8 +40,9 @@ class TreeNode extends Component {
   	filename: React.PropTypes.string.isRequired,
   	level: React.PropTypes.number.isRequired,
   	children: React.PropTypes.array.isRequired,
-  	childrenChecked: React.PropTypes.number.isRequired,
-  	checked: React.PropTypes.number.isRequired
+  	// childrenChecked: React.PropTypes.number.isRequired,
+  	checked: React.PropTypes.number.isRequired,
+  	// updateChildrenChecked: React.PropTypes.func.isRequired
 	};
 
 	constructor(props) {
@@ -49,6 +50,8 @@ class TreeNode extends Component {
     this.toggleFolder = this.toggleFolder.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
     this.setCheck = this.setCheck.bind(this);
+    this.updateChildrenChecked = this.updateChildrenChecked.bind(this);
+
     this.state = {
     	checked: props.checked,
     	children: [],
@@ -65,62 +68,51 @@ class TreeNode extends Component {
   		this.setState({ children: this.props.children });	
   }
 
-  handleCheck(e) {
-  	// update parents children checked ***
-
-  	if (e.target.checked) 
-  		this.setState({ checked : 1, childrenCheck: this.props.children.length });
-  	else 
-  		this.setState({ checked : 0 });
-
-  	this.props.setCheck(1.5);		// half check
-  }
-
   componentWillReceiveProps(nextProps) {
-  	// console.log(nextProps.checked)
   	this.setState({
   		checked: nextProps.checked,
+  		childrenCheck: nextProps.checked? nextProps.children.length : 0
   	});
   }
 
-	getInden() {
-		let iden = '', i = 0;
-		while (i < this.state.level) {
-			iden += ' '
-			i++
-		}
-		return iden;
-	}
+  handleCheck(e) {
+  	if (e.target.checked) {
+  		this.setState({ checked : 1, childrenCheck: this.props.children.length });
+  		this.props.tellParent(1);
+  	}	else {
+  		this.setState({ checked : 0 });
+  		this.props.tellParent(-1);
+  	}
+  	this.props.setCheck(0.5);		// half check
+  }
 
-	getCheckBox() {
-		if (this.state.checked === 1) {
-			return <input type="checkbox" onChange={this.handleCheck} checked={true} ref={box => this.checkBox = box}/>
-		} else {
-			return <input type="checkbox" onChange={this.handleCheck} checked={false} ref={box => this.checkBox = box}/>
-		}
-	}
-
-	setCheck(status) {
+	setCheck(status) {							// mainly for children's use
 		if (status === 0) 
 			this.checkBox.checked = false;
-		else if (status === 1.5)
+		else if (status === 0.5)
   		this.checkBox.indeterminate = true;
-  	else if (status === 2)
+  	else if (status === 1)
   		this.checkBox.checked = true;
   	else 
   		console.log('check status error!')
   }
 
-  handleChildrenCheck(status) {
-  	if (status === 1) {		// check
-  		this.setState({childrenChecked: this.state.childrenChecked + 1});
-  	} else {							// uncheck
-  		this.setState({childrenChecked: this.state.childrenChecked - 1});
-			if (this.state.childrenChecked === 0) {
-				this.setCheck(0);
-			}
-  	}
+  updateChildrenChecked(num) {		// update childrenCheck count when children updates
+		this.setState({childrenChecked: this.state.childrenChecked + num});		
+		if (this.state.childrenChecked === 0) 
+			this.setCheck(0);
+		else if (this.state.childrenChecked === this.state.children.length) 
+			this.setCheck(1);
   }
+
+  // getChildrenChecked(child) {
+  // 	let checkedNum = 0;
+  // 	if (this.state.checked === 1) {
+  // 		for (let i = 0; i< this.props.children; i++) 
+  // 			checkedNum++; 	
+  // 	} 
+  // 	return checkedNum;
+  // }
 
  	render() {
  		// console.log('render')
@@ -142,10 +134,13 @@ class TreeNode extends Component {
 				        	category={child.category} 
 				        	filename={child.filename} 
 				        	level={this.state.level + 1} 
+				        	checked={this.state.checked}
+
 				        	children={child.children? child.children : []}
 				        	childrenStatus={child.children? getStatusArray(child.children.length, this.state.checked) : []} 
-				        	checked={this.state.checked}
+				        	
 				        	setCheck={this.setCheck}
+				        	tellParent={this.updateChildrenChecked}
 			        	/>
 			        )
 	        	})
@@ -164,7 +159,25 @@ class TreeNode extends Component {
  		}
 
   }
+
+  /****** structure functions ******/
+  getInden() {
+		let iden = '', i = 0;
+		while (i < this.state.level) {
+			iden += ' ';
+			i++;
+		}
+		return iden;
+	}
+
+	getCheckBox() {
+		if (this.state.checked === 1) 
+			return <input type="checkbox" onChange={this.handleCheck} checked={true} ref={box => this.checkBox = box}/>
+		else 
+			return <input type="checkbox" onChange={this.handleCheck} checked={false} ref={box => this.checkBox = box}/>
+	}
 }
+
 
 function getStatusArray(n, status) {
   	let statusArray = [];

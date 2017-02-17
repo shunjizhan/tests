@@ -25,6 +25,7 @@ class Tree extends Component {
 	      	children={this.state.data.children} 
 	      	level={0} 
 	      	checked={0}
+	      	setHalfCheck={() => {}}
 	      />
 	    )
 	}
@@ -45,6 +46,7 @@ class TreeNode extends Component {
     super(props);
     this.toggleFolder = this.toggleFolder.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
+    // this.getCheckBox = this.getCheckBox.bind(this);
     this.state = {
     	checked: props.checked,
     	children: [],
@@ -70,17 +72,18 @@ class TreeNode extends Component {
   	// console.log(this)
   	if (e.target.checked) {
   		this.setState({checked : 1});
-  		console.log('checked');
+  		// console.log('checked');
   		// e.target.checked = false;
+  		this.props.setHalfCheck();
   	} else {
   		this.setState({checked : 0});
-  		console.log('uncheck');
+  		// console.log('uncheck');
   		// e.target.checked = true;
   	}
   }
 
   componentWillReceiveProps(nextProps) {
-  	console.log(nextProps.checked)
+  	// console.log(nextProps.checked)
   	this.setState({checked: nextProps.checked});
   }
 
@@ -93,19 +96,21 @@ class TreeNode extends Component {
 		return iden;
 	}
 
-
-
 	getCheckBox() {
 		if (this.state.checked === 0) {
-			console.log('this.state.checked === 0')
-			return <input type="checkbox" onClick={this.handleCheck} checked={false}/>
+			return <input type="checkbox" onClick={this.handleCheck} checked={false} ref={box => this.checkBox = box}/>
 		} else {
-			return <input type="checkbox" onClick={this.handleCheck} checked={true}/>
+			return <input type="checkbox" onClick={this.handleCheck} checked={true} ref={box => this.checkBox = box}/>
 		}
 	}
 
+	setHalfCheck() {
+		console.log(this.checkBox)
+  	// this.checkBox.indeterminate = true;
+  }
+
  	render() {
- 		console.log('render')
+ 		// console.log('render')
  		if (this.props.category === 'folder') {
 	 		return (
 	      <div className='folder'>
@@ -125,6 +130,7 @@ class TreeNode extends Component {
 				        	level={this.state.level + 1} 
 				        	children={child.children? child.children : []} 
 				        	checked={this.state.checked}
+				        	setHalfCheck={this.setHalfCheck}
 			        	/>
 			        )
 	        })}</ul>

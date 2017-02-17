@@ -46,7 +46,7 @@ class TreeNode extends Component {
     super(props);
     this.toggleFolder = this.toggleFolder.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
-    // this.getCheckBox = this.getCheckBox.bind(this);
+    this.setHalfCheck = this.setHalfCheck.bind(this);
     this.state = {
     	checked: props.checked,
     	children: [],
@@ -69,16 +69,14 @@ class TreeNode extends Component {
   }
 
   handleCheck(e) {
-  	// console.log(this)
   	if (e.target.checked) {
   		this.setState({checked : 1});
-  		// console.log('checked');
   		// e.target.checked = false;
-  		this.props.setHalfCheck();
+  		this.props.setHalfCheck(true);
   	} else {
   		this.setState({checked : 0});
-  		// console.log('uncheck');
   		// e.target.checked = true;
+  		this.props.setHalfCheck(true);
   	}
   }
 
@@ -98,15 +96,14 @@ class TreeNode extends Component {
 
 	getCheckBox() {
 		if (this.state.checked === 0) {
-			return <input type="checkbox" onClick={this.handleCheck} checked={false} ref={box => this.checkBox = box}/>
+			return <input type="checkbox" onChange={this.handleCheck} checked={false} ref={box => this.checkBox = box}/>
 		} else {
-			return <input type="checkbox" onClick={this.handleCheck} checked={true} ref={box => this.checkBox = box}/>
+			return <input type="checkbox" onChange={this.handleCheck} checked={true} ref={box => this.checkBox = box}/>
 		}
 	}
 
-	setHalfCheck() {
-		console.log(this.checkBox)
-  	// this.checkBox.indeterminate = true;
+	setHalfCheck(status) {
+  	this.checkBox.indeterminate = status;
   }
 
  	render() {

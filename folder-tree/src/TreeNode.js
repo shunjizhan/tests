@@ -9,8 +9,8 @@ class Tree extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-    	open: false,
     	data: props.data,
+    	childrenCheck:[],
     	selectedFolders: []	// array of object
     };
   }
@@ -22,7 +22,8 @@ class Tree extends Component {
 	      	key={this.state.data.id} 
 	      	category={this.state.data.category} 
 	      	filename={this.state.data.filename} 
-	      	children={this.state.data.children} 
+	      	children={this.state.data.children? this.state.data.children : []} 
+	      	childrenStatus={this.state.data.children? getStatusArray(this.state.data.children.length, 0) : []} 
 	      	level={0} 
 	      	checked={0}
 	      	setHalfCheck={() => {}}
@@ -39,6 +40,7 @@ class TreeNode extends Component {
   	filename: React.PropTypes.string.isRequired,
   	level: React.PropTypes.number.isRequired,
   	children: React.PropTypes.array.isRequired,
+  	childrenStatus: React.PropTypes.array.isRequired,
   	checked: React.PropTypes.number.isRequired
 	};
 
@@ -50,6 +52,7 @@ class TreeNode extends Component {
     this.state = {
     	checked: props.checked,
     	children: [],
+    	childrenStatus:[],
     	level: props.level
     };
   }
@@ -57,32 +60,37 @@ class TreeNode extends Component {
   toggleFolder() {
   	if (this.state.children.length > 0) {
   		this.setState({
-  			open: false,
   			children: []
   		});
   	}	else {
   		this.setState({
-  			open: true,
-  			children: this.props.children,
+  			children: this.props.children
   		});
   	}  	
   }
 
   handleCheck(e) {
   	if (e.target.checked) {
-  		this.setState({checked : 1});
+  		this.setState({
+  			checked : 1,
+  			childrenStatus: getStatusArray(this.props.children.length, 1)
+  		});
   		// e.target.checked = false;
-  		this.props.setHalfCheck(true);
   	} else {
-  		this.setState({checked : 0});
+  		this.setState({
+  			checked : 0,
+  			childrenStatus: getStatusArray(this.props.children.length, 0)
+  		});
   		// e.target.checked = true;
-  		this.props.setHalfCheck(true);
   	}
+  	this.props.setHalfCheck(true);
   }
 
   componentWillReceiveProps(nextProps) {
   	// console.log(nextProps.checked)
-  	this.setState({checked: nextProps.checked});
+  	this.setState({
+  		checked: nextProps.checked,
+  	});
   }
 
 	getInden() {
@@ -95,10 +103,10 @@ class TreeNode extends Component {
 	}
 
 	getCheckBox() {
-		if (this.state.checked === 0) {
-			return <input type="checkbox" onChange={this.handleCheck} checked={false} ref={box => this.checkBox = box}/>
-		} else {
+		if (this.state.checked === 1) {
 			return <input type="checkbox" onChange={this.handleCheck} checked={true} ref={box => this.checkBox = box}/>
+		} else {
+			return <input type="checkbox" onChange={this.handleCheck} checked={false} ref={box => this.checkBox = box}/>
 		}
 	}
 
@@ -116,8 +124,9 @@ class TreeNode extends Component {
 	      	<a onClick={this.toggleFolder}>
 		        <FontAwesome name={this.state.open? 'folder-open': 'folder'}/> {this.props.filename}
 	        </a>
-	        <ul>{
-	        	this.state.children.map( child => {
+	        <ul>
+	        {
+	        	this.state.children.map( (child, i) => {
 		        	return (
 		        		<TreeNode 
 		        			className="aFolder"
@@ -125,12 +134,15 @@ class TreeNode extends Component {
 				        	category={child.category} 
 				        	filename={child.filename} 
 				        	level={this.state.level + 1} 
-				        	children={child.children? child.children : []} 
+				        	children={child.children? child.children : []}
+				        	childrenStatus={child.children? getStatusArray(child.children.length, this.state.checked) : []} 
 				        	checked={this.state.checked}
 				        	setHalfCheck={this.setHalfCheck}
 			        	/>
 			        )
-	        })}</ul>
+	        	})
+	        }
+	        </ul>
 
 	      </div>
 	    )
@@ -145,5 +157,13 @@ class TreeNode extends Component {
 
   }
 }
+
+function getStatusArray(n, status) {
+  	let statusArray = [];
+  	for (let i = 0; i < n; i++) {
+  		statusArray[i] = status;		// defult to unchecked
+  	}
+  	return statusArray;
+  }
 
 export default Tree;

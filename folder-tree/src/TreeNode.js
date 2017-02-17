@@ -23,10 +23,10 @@ class Tree extends Component {
 	      	category={this.state.data.category} 
 	      	filename={this.state.data.filename} 
 	      	children={this.state.data.children? this.state.data.children : []} 
-	      	childrenStatus={this.state.data.children? getStatusArray(this.state.data.children.length, 0) : []} 
+	      	childrenChecked={0} 
 	      	level={0} 
 	      	checked={0}
-	      	setHalfCheck={() => {}}
+	      	setCheck={() => {}}
 	      />
 	    )
 	}
@@ -40,7 +40,7 @@ class TreeNode extends Component {
   	filename: React.PropTypes.string.isRequired,
   	level: React.PropTypes.number.isRequired,
   	children: React.PropTypes.array.isRequired,
-  	childrenStatus: React.PropTypes.array.isRequired,
+  	childrenChecked: React.PropTypes.number.isRequired,
   	checked: React.PropTypes.number.isRequired
 	};
 
@@ -48,42 +48,32 @@ class TreeNode extends Component {
     super(props);
     this.toggleFolder = this.toggleFolder.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
-    this.setHalfCheck = this.setHalfCheck.bind(this);
+    this.setCheck = this.setCheck.bind(this);
     this.state = {
     	checked: props.checked,
     	children: [],
     	childrenStatus:[],
+    	childrenChecked: 0,				// number of direct children checked
     	level: props.level
     };
   }
 
   toggleFolder() {
-  	if (this.state.children.length > 0) {
-  		this.setState({
-  			children: []
-  		});
-  	}	else {
-  		this.setState({
-  			children: this.props.children
-  		});
-  	}  	
+  	if (this.state.children.length > 0) 
+  		this.setState({ children: [] });
+    else 
+  		this.setState({ children: this.props.children });	
   }
 
   handleCheck(e) {
-  	if (e.target.checked) {
-  		this.setState({
-  			checked : 1,
-  			childrenStatus: getStatusArray(this.props.children.length, 1)
-  		});
-  		// e.target.checked = false;
-  	} else {
-  		this.setState({
-  			checked : 0,
-  			childrenStatus: getStatusArray(this.props.children.length, 0)
-  		});
-  		// e.target.checked = true;
-  	}
-  	this.props.setHalfCheck(true);
+  	// update parents children checked ***
+
+  	if (e.target.checked) 
+  		this.setState({ checked : 1, childrenCheck: this.props.children.length });
+  	else 
+  		this.setState({ checked : 0 });
+
+  	this.props.setCheck(1.5);		// half check
   }
 
   componentWillReceiveProps(nextProps) {
@@ -110,8 +100,26 @@ class TreeNode extends Component {
 		}
 	}
 
-	setHalfCheck(status) {
-  	this.checkBox.indeterminate = status;
+	setCheck(status) {
+		if (status === 0) 
+			this.checkBox.checked = false;
+		else if (status === 1.5)
+  		this.checkBox.indeterminate = true;
+  	else if (status === 2)
+  		this.checkBox.checked = true;
+  	else 
+  		console.log('check status error!')
+  }
+
+  handleChildrenCheck(status) {
+  	if (status === 1) {		// check
+  		this.setState({childrenChecked: this.state.childrenChecked + 1});
+  	} else {							// uncheck
+  		this.setState({childrenChecked: this.state.childrenChecked - 1});
+			if (this.state.childrenChecked === 0) {
+				this.setCheck(0);
+			}
+  	}
   }
 
  	render() {
@@ -137,7 +145,7 @@ class TreeNode extends Component {
 				        	children={child.children? child.children : []}
 				        	childrenStatus={child.children? getStatusArray(child.children.length, this.state.checked) : []} 
 				        	checked={this.state.checked}
-				        	setHalfCheck={this.setHalfCheck}
+				        	setCheck={this.setCheck}
 			        	/>
 			        )
 	        	})

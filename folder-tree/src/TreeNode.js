@@ -43,6 +43,7 @@ class TreeNode extends Component {
     super(props);
     this.toggleFolder = this.toggleFolder.bind(this);
     this.state = {
+    	checked: 0,
     	children: [],
     	level: props.level
     };
@@ -64,9 +65,11 @@ class TreeNode extends Component {
 
   handleCheck(e) {
   	if (e.target.checked) {
-  		console.log('checked')
+  		console.log('checked');
+  		// e.target.checked = false;
   	} else {
-  		console.log('uncheck')
+  		console.log('uncheck');
+  		// e.target.checked = true;
   	}
   }
 
@@ -79,12 +82,20 @@ class TreeNode extends Component {
 		return iden;
 	}
 
+	getCheckBox() {
+		if (this.state.checked === 0) {
+			return <input type="checkbox" onClick={this.handleCheck} />
+		} else {
+			return <input type="checkbox" onClick={this.handleCheck} defaultChecked/>
+		}
+	}
+
  	render() {
  		if (this.props.category === 'folder') {
 	 		return (
 	      <div className='folder'>
 	      	{this.getInden()}
-	      	<label><input type="checkbox" onClick={this.handleCheck} /></label>
+	      	{this.getCheckBox()}
 	      	<a onClick={this.toggleFolder}>
 		        <FontAwesome name={this.state.open? 'folder-open': 'folder'}/> {this.props.filename}
 	        </a>

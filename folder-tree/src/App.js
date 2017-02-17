@@ -14,59 +14,127 @@ var data = {
         {
           "id": 3,
           "filename": "Audio & Stereo",
+          "category": "folder",
+          "children": [
+    {
+      "id": 4,
+      "filename": "For Sale",
+      "category": "folder",
+      "children": [
+        {
+          "id": 5,
+          "filename": "Audio & Stereo",
           "category": "file"
         },
         {
-          "id": 4,
+          "id": 6,
           "filename": "Baby & Kids Stuff",
           "category": "file"
         },
         {
-          "id": 5,
+          "id": 7,
           "filename": "Music, Films, Books & Games",
           "category": "file"
         }
       ]
     },
     {
-      "id": 6,
+      "id": 8,
       "filename": "Motors",
       "category": "folder",
       "children": [
         {
-          "id": 7,
+          "id": 9,
           "filename": "Car Parts & Accessories",
           "category": "file"
         },
         {
-          "id": 8,
+          "id": 10,
           "filename": "Cars",
           "category": "file"
         },
         {
-          "id": 13,
+          "id": 11,
           "filename": "Motorbike Parts & Accessories",
           "category": "file"
         }
       ]
     },
     {
-      "id": 9,
+      "id": 12,
       "filename": "Jobs",
       "category": "folder",
       "children": [
         {
-          "id": 10,
+          "id": 13,
           "filename": "Accountancy",
           "category": "file"
         },
         {
-          "id": 11,
+          "id": 14,
           "filename": "Financial Services & Insurance",
           "category": "file"
         },
         {
-          "id": 12,
+          "id": 15,
+          "filename": "Bar Staff & Management",
+          "category": "file"
+        }
+      ]
+    }
+  ]
+        },
+        {
+          "id": 16,
+          "filename": "Baby & Kids Stuff",
+          "category": "file"
+        },
+        {
+          "id": 17,
+          "filename": "Music, Films, Books & Games",
+          "category": "file"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "filename": "Motors",
+      "category": "folder",
+      "children": [
+        {
+          "id": 19,
+          "filename": "Car Parts & Accessories",
+          "category": "file"
+        },
+        {
+          "id": 20,
+          "filename": "Cars",
+          "category": "file"
+        },
+        {
+          "id": 21,
+          "filename": "Motorbike Parts & Accessories",
+          "category": "file"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "filename": "Jobs",
+      "category": "folder",
+      "children": [
+        {
+          "id": 23,
+          "filename": "Accountancy",
+          "category": "file"
+        },
+        {
+          "id": 24,
+          "filename": "Financial Services & Insurance",
+          "category": "file"
+        },
+        {
+          "id": 25,
           "filename": "Bar Staff & Management",
           "category": "file"
         }

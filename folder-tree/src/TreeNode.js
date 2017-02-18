@@ -52,39 +52,51 @@ class TreeNode extends Component {
     this.handleCheck = this.handleCheck.bind(this);
     this.setCheck = this.setCheck.bind(this);
     this.updateChildrenChecked = this.updateChildrenChecked.bind(this);
+    this.getCheckStatus = this.getCheckStatus.bind(this);
 
     this.state = {
     	checked: props.checked,
     	children: [],
     	childrenStatus:[],
     	childrenChecked: 0,				// number of direct children checked
-    	level: props.level
+    	level: props.level,
+      open: false
     };
   }
 
   toggleFolder() {
   	if (this.state.children.length > 0) 
-  		this.setState({ children: [] });
+  		this.setState({ 
+        children: [],
+        open: false 
+      });
     else 
-  		this.setState({ children: this.props.children });	
+  		this.setState({ 
+        children: this.props.children,
+        open:true 
+      });	
   }
 
   componentWillReceiveProps(nextProps) {
-  	this.setState({
-  		checked: nextProps.checked,
-  		childrenChecked: nextProps.checked? this.getFolderNum(nextProps.children.length) : 0
-  	});
+    console.log('nextProps.checked: ' + nextProps.checked);
+    if (nextProps.checked !== -1) {
+    	this.setState({
+    		checked: nextProps.checked,
+    		childrenChecked: nextProps.checked? this.getFolderNum(nextProps.children.length) : 0
+    	});
+    } else {
+      this.setState({
+        childrenChecked: nextProps.checked? this.getFolderNum(nextProps.children.length) : 0
+      }); 
+    }
   }
 
   handleCheck(e) {
-  	console.log('handleCheck ')
-
   	if (e.target.checked) {
-  		console.log('checked!')
   		// console.log('childrens length: ' + this.getFolderNum(this.props.children) )
   		this.props.tellParent(1);
   		this.props.setCheck(0.5);
-  		console.log('setState 1')
+  		// console.log('setState 1');
   		this.setState({ 
   			checked : 1, 
   			childrenChecked: this.getFolderNum(this.props.children) 
@@ -92,24 +104,16 @@ class TreeNode extends Component {
   	}	else {
   		this.props.tellParent(-1);
   		this.props.setCheck(0.5);
-  		console.log('setState 0')
+  		// console.log('setState 0');
   		this.setState({ 
   			checked : 0,
   			childrenChecked: 0 
   		});
   	}
-
-  	this.setState({checked: 1});
-  	this.setState({checked: 1});
-  	this.setState({checked: 1});
-  	this.setState({checked: 1});
-  	this.setState({checked: 1});
-  	this.setState({checked: 1});
-  	this.setState({checked: 1});
   }
 
-	setCheck(status) {											
-		console.log('setCheck ' + status)
+	setCheck(status) {				               // mainly for children's use							
+		// console.log('setCheck ' + status)
 		if (status === 0) {
 			this.setState ({checked : 0});
   	} else if (status === 0.5) {						
@@ -122,9 +126,10 @@ class TreeNode extends Component {
   }
 
   updateChildrenChecked(num) {		// update childrenCheck count when children updates
-  	console.log('updateChildrenChecked ' + num)
+  	// console.log('updateChildrenChecked ' + num)
 
 		this.setState({childrenChecked: this.state.childrenChecked + num});	
+    // console.log('finished set state!!!!');
 
 		// if (this.state.childrenChecked === 0 ) {
 		// 	console.log('00000')
@@ -143,14 +148,21 @@ class TreeNode extends Component {
   	return count;
   }
 
-  // getChildrenChecked(child) {
-  // 	let checkedNum = 0;
-  // 	if (this.state.checked === 1) {
-  // 		for (let i = 0; i< this.props.children; i++) 
-  // 			checkedNum++; 	
-  // 	} 
-  // 	return checkedNum;
-  // }
+  getChildrenChecked(child) {
+  	let checkedNum = 0;
+  	if (this.state.checked === 1) {
+  		for (let i = 0; i< this.props.children; i++) 
+  			checkedNum++; 	
+  	} 
+  	return checkedNum;
+  }
+
+  getCheckStatus() {
+    if (this.checkBox.indeterminate === true)
+      return -1;
+    else 
+      return this.state.checked;
+  }
 
  	render() {
  		console.log('render checked = ' + this.state.checked)
@@ -172,7 +184,7 @@ class TreeNode extends Component {
 				        	category={child.category} 
 				        	filename={child.filename} 
 				        	level={this.state.level + 1} 
-				        	checked={this.state.checked}
+				        	checked={this.getCheckStatus()}
 
 				        	children={child.children? child.children : []}
 				        	childrenStatus={child.children? getStatusArray(this.getFolderNum(child.children.length), this.state.checked) : []} 

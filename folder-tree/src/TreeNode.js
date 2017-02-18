@@ -116,11 +116,13 @@ class TreeNode extends Component {
 		// console.log('setCheck ' + status)
 		if (status === 0) {
 			this.setState ({checked : 0});
+      this.checkBox.indeterminate = false;
   	} else if (status === 0.5) {						
   		this.checkBox.indeterminate = true;
   		this.props.setCheck(0.5);							// recursively set parents half check
 		} else if (status === 1) {
   		this.setState ({checked : 1});
+      this.checkBox.indeterminate = false;
   	} else 
   		console.log('check status error!')
   }
@@ -128,16 +130,20 @@ class TreeNode extends Component {
   updateChildrenChecked(num) {		// update childrenCheck count when children updates
   	// console.log('updateChildrenChecked ' + num)
 
-		this.setState({childrenChecked: this.state.childrenChecked + num});	
-    // console.log('finished set state!!!!');
+		this.setState({childrenChecked: this.state.childrenChecked + num}, () => {
+      console.log(this.state.childrenChecked);
 
-		// if (this.state.childrenChecked === 0 ) {
-		// 	console.log('00000')
-		// 	this.setCheck(0);
-		// } else if (this.state.childrenChecked === this.getFolderNum(this.state.children.length) ) {
-		// 	console.log('11111')
-		// 	this.setCheck(1);
-		// }
+      if (this.state.childrenChecked === 0 ) {
+        console.log('00000')
+        this.setCheck(0);
+      } else if (this.state.childrenChecked === this.getFolderNum(this.state.children) ) {
+        console.log('11111')
+        this.setCheck(1);
+      }
+    });	
+
+
+
   }
 
   getFolderNum(array) {

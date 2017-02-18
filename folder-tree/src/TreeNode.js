@@ -53,6 +53,7 @@ class TreeNode extends Component {
     this.setCheck = this.setCheck.bind(this);
     this.updateChildrenChecked = this.updateChildrenChecked.bind(this);
     this.getCheckStatus = this.getCheckStatus.bind(this);
+    this.getNewCheckStatus = this.getNewCheckStatus.bind(this)
 
     this.state = {
     	checked: props.checked,
@@ -79,12 +80,12 @@ class TreeNode extends Component {
 
   componentWillReceiveProps(nextProps) {
     console.log('nextProps.checked: ' + nextProps.checked);
-    if (nextProps.checked !== -1) {
+    if (nextProps.checked !== -1) {   // parent changes children's checked unless the flag is not set
     	this.setState({
     		checked: nextProps.checked,
     		childrenChecked: nextProps.checked? this.getFolderNum(nextProps.children.length) : 0
     	});
-    } else {
+    } else {                          // parent don't change children's checked state
       this.setState({
         childrenChecked: nextProps.checked? this.getFolderNum(nextProps.children.length) : 0
       }); 
@@ -112,38 +113,46 @@ class TreeNode extends Component {
   	}
   }
 
-	setCheck(status) {				               // mainly for children's use							
+	setCheck(status, flag = 0) {				               // mainly for children's use!							
 		// console.log('setCheck ' + status)
 		if (status === 0) {
 			this.setState ({checked : 0});
       this.checkBox.indeterminate = false;
+      this.checkBox.value = flag;
   	} else if (status === 0.5) {						
   		this.checkBox.indeterminate = true;
-  		this.props.setCheck(0.5);							// recursively set parents half check
+  		this.props.setCheck(0.5);							    // recursively set parents half check
+      this.checkBox.value = flag;
 		} else if (status === 1) {
   		this.setState ({checked : 1});
       this.checkBox.indeterminate = false;
+      this.checkBox.value = flag;
   	} else 
   		console.log('check status error!')
   }
 
   updateChildrenChecked(num) {		// update childrenCheck count when children updates
   	// console.log('updateChildrenChecked ' + num)
+    // if (num !== 0) {
+		  // this.setState({childrenChecked: this.state.childrenChecked + num}, this.getNewCheckStatus);	
+    // } else {
+    //   this.getNewCheckStatus();
+    // }
 
-		this.setState({childrenChecked: this.state.childrenChecked + num}, () => {
+    // this.props.tellParent(0);
+    this.setState({childrenChecked: this.state.childrenChecked + num}, this.getNewCheckStatus);
+  }
+
+  getNewCheckStatus() {
       console.log(this.state.childrenChecked);
 
       if (this.state.childrenChecked === 0 ) {
-        console.log('00000')
-        this.setCheck(0);
+        // console.log('00000')
+        this.setCheck(0, 1);    // second argument to set flag asking not to influence children
       } else if (this.state.childrenChecked === this.getFolderNum(this.state.children) ) {
-        console.log('11111')
-        this.setCheck(1);
+        // console.log('11111')
+        this.setCheck(1, 1);
       }
-    });	
-
-
-
   }
 
   getFolderNum(array) {
@@ -163,15 +172,8 @@ class TreeNode extends Component {
   	return checkedNum;
   }
 
-  getCheckStatus() {
-    if (this.checkBox.indeterminate === true)
-      return -1;
-    else 
-      return this.state.checked;
-  }
-
  	render() {
- 		console.log('render checked = ' + this.state.checked)
+ 		// console.log('render checked = ' + this.state.checked)
  		if (this.props.category === 'folder') {
 	 		return (
 	      <div className='folder'>
@@ -217,7 +219,7 @@ class TreeNode extends Component {
   }
 
   /****** structure functions ******/
-  getInden() {
+  getInden() {                    // get indentation for each level of tree
 		let iden = '', i = 0;
 		while (i < this.state.level) {
 			iden += ' ';
@@ -232,6 +234,13 @@ class TreeNode extends Component {
 		else 
 			return <input type="checkbox" onChange={this.handleCheck} checked={false} ref={box => this.checkBox = box}/>
 	}
+
+  getCheckStatus() {
+    if (this.checkBox.indeterminate === true)
+      return -1;    // flag to tell parent not to influce children
+    else 
+      return this.state.checked;
+  }
 }
 
 

@@ -84,18 +84,18 @@ class TreeNode extends Component {
 
   handleCheck(e) {																// handle this level's check
   	if (e.target.checked) {
-  		console.log('setState 1');
+  		// console.log('setState 1');
   		this.props.setChildrenStatus(this.props.id, 1);
   		this.setState(changeAllChildrenStatus(this.state.children, 1));
   	}	else {
-  		console.log('setState 0');
-  		this.props.setChildrenStatus(this.props.id, 0);
-  		this.setState(changeAllChildrenStatus(this.state.children, 0));
+  		// console.log('setState 0');
+  		this.props.setChildrenStatus(this.props.id, 0);										// own check
+  		this.setState(changeAllChildrenStatus(this.state.children, 0));		// children's check
   	}
   }
 
   setChildrenStatus = (id, status) => {									// child use it to update its status
-  	console.log('set childrenStatus ', id, status)
+  	console.log('set childrenStatus ', status)
 
   	let children = this.state.children;
   	if (children) {
@@ -106,13 +106,23 @@ class TreeNode extends Component {
 	  }
   	this.setState({ children: children });
 
-  	this.props.setChildrenStatus(this.props.id, this.getCheckedStatus());
+  	// console.log(this.getCheckedStatus())
+  	this.props.setChildrenStatus(this.props.id, this.getCheckedStatus(status));
   }
 
-  getCheckedStatus = () => {
+  getCheckedStatus = (prevStatus) => {
+  	// const halfCheckedChildren = this.state.children.filter(child => {
+  	// 	return child.status === 0.5;
+  	// });
+
+  	if (prevStatus === 0.5) {
+  		return 0.5;
+  	}
+
   	const selectedChildren = this.state.children.filter(child => {
   		return child.status === 1;
   	});
+
 
   	if (selectedChildren.length === getFolderNum(this.state.children)) {
   		return 1;

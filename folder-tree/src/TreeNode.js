@@ -59,9 +59,13 @@ class TreeNode extends Component {
     };
   }
 
-  componentWillMount() {
-
-  }
+  // componentWillMount() {
+  // 	console.log(1111)
+  // 	this.props.children.map( child => {
+  // 		child.status = 0;
+  // 		return child;		// defult status
+  // 	})
+  // }
 
   toggleFolder() {
   	if (this.state.children.length > 0) 
@@ -185,17 +189,18 @@ class TreeNode extends Component {
 	        <ul>
 	        {
 	        	this.state.children.map( (child, i) => {
+	        		console.log('child status: ', child.status)
 		        	return (
 		        		<TreeNode 
 		        			className="aFolder"
-				        	key={child.id} 
+				        	key={child.id}
+				        	level={this.state.level + 1}  
 				        	category={child.category} 
-				        	filename={child.filename} 
-				        	level={this.state.level + 1} 
-				        	checked={0}
+				        	filename={child.filename} 				    
+				        	checked={child.status}
 
 				        	children={child.children? child.children : []}
-				        	
+
 				        	setCheck={this.setCheck}
 				        	tellParent={this.updateChildrenChecked}
 			        	/>
@@ -243,7 +248,7 @@ class Checkbox extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log('Checking indeterminate status', this.props.status);
+		// console.log('Checking indeterminate status', this.props.status);
 		if (this.props.status === 0.5) 
 			this.checkBox.indeterminate = true;
 		else
@@ -251,7 +256,7 @@ class Checkbox extends React.Component {
 	}
 
 	render() {
-		return <input type="checkbox" onChange={this.props.handleCheck} checked={this.props.status === 1? true : false} ref={box => this.checkBox = box}/>
+		return <input type="checkbox" onChange={this.props.handleCheck} checked={this.props.status !== 1? false : true} ref={box => this.checkBox = box}/>
 	}
 }
 

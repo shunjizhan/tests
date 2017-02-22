@@ -145,15 +145,30 @@ var data = {
 }
 
 class App extends Component {
+
+
+
   render() {
     return (
       <div className='folder-tree'>
-        <Tree data={data} onChange={selectedFolders => console.log(selectedFolders)} />
+        <Tree data={modify(data)} onChange={selectedFolders => console.log(selectedFolders)} />
       </div>
     )
     // return <CheckBox status={0.5} handleCheck={ () => {} }/>
   }
 }
+
+  function modify(data) {
+    if (data.children) {
+      for (let i = 0; i < data.children.length; i++)
+        data[i] = modify(data.children[i]);
+    }
+
+    data.status = 0;
+
+    // console.log(data);
+    return data;
+  }
 
 // const mapState = state => {
 //   return {

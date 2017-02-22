@@ -120,9 +120,10 @@ class TreeNode extends Component {
   	}
 
   	const selectedChildren = this.state.children.filter(child => {
-  		return child.status === 1;
+  		return child.status === 1 && child.category === 'folder';
   	});
 
+  	console.log('selectedChildren: ', selectedChildren.length)
 
   	if (selectedChildren.length === getFolderNum(this.state.children)) {
   		return 1;

@@ -105,6 +105,8 @@ class TreeNode extends Component {
 	  	}
 	  }
   	this.setState({ children: children });
+
+  	this.props.setChildrenStatus(this.props.id, this.getCheckedStatus());
   }
 
   getCheckedStatus = () => {
@@ -112,7 +114,7 @@ class TreeNode extends Component {
   		return child.status === 1;
   	});
 
-  	if (selectedChildren.length === this.state.children.length) {
+  	if (selectedChildren.length === getFolderNum(this.state.children)) {
   		return 1;
   	} else if (selectedChildren.length === 0) {
   		return 0;
@@ -178,21 +180,27 @@ class TreeNode extends Component {
 
 }
 
-  function changeAllChildrenStatus(children, status) {											// set all current children's status
-  	console.log('set all childrenStatus ', status)
+function changeAllChildrenStatus(children, status) {											// set all current and lower children's status
+	console.log('set all childrenStatus ', status)
 
-  	for (let i = 0; i < children.length; i++) {
-  		if (children[i].children) {
-	  		for (let j = 0; j < children[i].children.length; j++) 
-	  			children[i].children = changeAllChildrenStatus(children[i].children, status)
-	  	}
-  		children[i].status = status;
+	for (let i = 0; i < children.length; i++) {
+		if (children[i].children) {
+			for (let j = 0; j < children[i].children.length; j++) 
+  			children[i].children = changeAllChildrenStatus(children[i].children, status)
   	}
+ 		children[i].status = status;
+ 	}
 
-  	return children;
+ 	return children;
+}
+
+function getFolderNum(array) {
+  	let count = 0;
+  	for (let i = 0; i < array.length; i++)
+  		if (array[i].category === 'folder')
+  			count++;
+  	return count;
   }
-
-
 
 
 
@@ -255,14 +263,6 @@ class Checkbox extends React.Component {
 // 	  	}
 // 	  }
 //   	return statusArray;
-//   }
-
-// function getFolderNum(array) {
-//   	let count = 0;
-//   	for (let i = 0; i < array.length; i++)
-//   		if (array[i].category === 'folder')
-//   			count++;
-//   	return count;
 //   }
 
 export default Tree;

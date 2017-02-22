@@ -120,12 +120,14 @@ class TreeNode extends Component {
   	}
 
   	const selectedChildren = this.state.children.filter(child => {
-  		return child.status === 1 && child.category === 'folder';
+  		// return child.status === 1 && child.category === 'folder';
+  		return child.status === 1;
   	});
 
   	console.log('selectedChildren: ', selectedChildren.length)
 
-  	if (selectedChildren.length === getFolderNum(this.state.children)) {
+  	// if (selectedChildren.length === getFolderNum(this.state.children)) {
+  	if (selectedChildren.length === this.state.children.length) {
   		return 1;
   	} else if (selectedChildren.length === 0) {
   		return 0;
@@ -173,7 +175,8 @@ class TreeNode extends Component {
  		} else {
  			return (
 	      <div className='file'>
-	        {this.getInden() + '    '}
+	        {this.getInden()}
+	        <Checkbox status={this.props.checked} handleCheck={this.handleCheck} />
 		      <FontAwesome name='file-o'/> {this.props.filename}
 	      </div>
 	    )

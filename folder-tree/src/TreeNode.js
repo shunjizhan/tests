@@ -8,11 +8,18 @@ class Tree extends Component {
 
 	constructor(props) {
     super(props);
+    this.setRootStatus = this.setRootStatus.bind(this);
+
     this.state = {
     	data: props.data,
-    	childrenChecked:[],
+    	checked: 0,
     	selectedFolders: []	// array of object
     };
+  }
+
+  setRootStatus(id, status) {
+  	console.log('set rootStatus ', id)
+  	this.setState({checked: status});
   }
 
  	render() {
@@ -23,8 +30,10 @@ class Tree extends Component {
 	      	category={this.state.data.category} 
 	      	filename={this.state.data.filename} 
 	      	children={this.state.data.children? this.state.data.children : []} 
+	      	id={this.state.data.id}
+	      	setChildrenStatus={this.setRootStatus}
 	      	level={0} 
-	      	checked={0}
+	      	checked={this.state.checked}
 	      	setCheck={() => {}}
 	      	tellParent={() => {}}
 	      />
@@ -40,15 +49,16 @@ class TreeNode extends Component {
   	filename: React.PropTypes.string.isRequired,
   	level: React.PropTypes.number.isRequired,
   	children: React.PropTypes.array.isRequired,
-  	// childrenChecked: React.PropTypes.number.isRequired,
   	checked: React.PropTypes.number.isRequired,
-  	// updateChildrenChecked: React.PropTypes.func.isRequired
+  	id: React.PropTypes.number.isRequired,
+  	setChildrenStatus: React.PropTypes.func.isRequired
 	};
 
 	constructor(props) {
     super(props);
     this.toggleFolder = this.toggleFolder.bind(this);
-    // this.handleCheck = this.handleCheck.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
+    this.setChildrenStatus = this.setChildrenStatus.bind(this);
     // this.setCheck = this.setCheck.bind(this);
 
     this.state = {
@@ -176,13 +186,36 @@ class TreeNode extends Component {
   // // 	return checkedNum;
   // // }
 
+  handleCheck(e) {
+  	if (e.target.checked) {
+  		console.log('setState 1');
+  		this.props.setChildrenStatus(this.props.id, 1);
+  	}	else {
+  		console.log('setState 0');
+  		this.props.setChildrenStatus(this.props.id, 0);
+  	}
+  }
+
+  setChildrenStatus(id, status) {
+  	console.log('set childrenStatus ', id)
+
+  	let children = this.state.children;
+  	for (let i = 0; i < children.length; i++) {
+  		if (children[i].id === id) {
+  			console.log('found!!!')
+  			children[i].status = status;
+  		}
+  	}
+  	this.setState({children: children});
+  }
+
  	render() {
  		// console.log('render checked = ' + this.state.checked)
  		if (this.props.category === 'folder') {
 	 		return (
 	      <div className='folder'>
 	      	{this.getInden()}
-	      	<Checkbox status={this.props.checked} handleCheck={ () => {} } />
+	      	<Checkbox status={this.props.checked} handleCheck={ this.handleCheck } />
 	      	<a onClick={this.toggleFolder}>
 		        <FontAwesome name={this.state.open? 'folder-open': 'folder'}/> {this.props.filename}
 	        </a>
@@ -193,16 +226,17 @@ class TreeNode extends Component {
 		        	return (
 		        		<TreeNode 
 		        			className="aFolder"
+				        	id={child.id}
 				        	key={child.id}
-				        	level={this.state.level + 1}  
+				        	level={this.state.level + 1} 
+
 				        	category={child.category} 
 				        	filename={child.filename} 				    
 				        	checked={child.status}
 
 				        	children={child.children? child.children : []}
 
-				        	setCheck={this.setCheck}
-				        	tellParent={this.updateChildrenChecked}
+				        	setChildrenStatus={this.setChildrenStatus}
 			        	/>
 			        )
 	        	})
@@ -239,6 +273,11 @@ class Checkbox extends React.Component {
   	status: React.PropTypes.number.isRequired
 	};
 
+	constructor(props) {
+    super(props);
+    this.handleCheck = this.handleCheck.bind(this);
+  }
+
 	componentDidUpdate(prevProps, prevState) {
 		// console.log('Checking indeterminate status', this.props.status);
 		if (this.props.status === 0.5) 
@@ -255,8 +294,12 @@ class Checkbox extends React.Component {
 			this.checkBox.indeterminate = false;
 	}
 
+	handleCheck(e) {
+		this.props.handleCheck(e);
+	}
+
 	render() {
-		return <input type="checkbox" onChange={this.props.handleCheck} checked={this.props.status !== 1? false : true} ref={box => this.checkBox = box}/>
+		return <input type="checkbox" onChange={this.handleCheck} checked={this.props.status !== 1? false : true} ref={box => this.checkBox = box}/>
 	}
 }
 

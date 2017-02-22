@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import Tree from './TreeNode'
 import Tree from './TreeNode'
 
 var data = {
@@ -150,6 +151,7 @@ class App extends Component {
         <Tree data={data} onChange={selectedFolders => console.log(selectedFolders)} />
       </div>
     )
+    // return <CheckBox status={0.5} handleCheck={ () => {} }/>
   }
 }
 

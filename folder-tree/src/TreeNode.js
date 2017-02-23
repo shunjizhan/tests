@@ -20,7 +20,9 @@ class Tree extends Component {
 
   setRootStatus(id, status) {
   	console.log('set rootStatus ', status)
-  	this.setState({checked: status});
+  	let newData = this.state.data;
+  	newData.status = status;
+  	this.setState({data: newData});
   }
 
  	render() {
@@ -35,7 +37,7 @@ class Tree extends Component {
 	      	id={this.state.data.id}
 	      	setChildrenStatus={this.setRootStatus}
 	      	level={0} 
-	      	checked={this.state.checked}
+	      	checked={this.state.data.status}
 	      	setCheck={() => {}}
 	      	tellParent={() => {}}
 	      />

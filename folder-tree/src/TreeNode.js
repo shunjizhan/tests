@@ -3,7 +3,7 @@ import FontAwesome from 'react-fontawesome';
 
 class Tree extends Component {
   static propTypes = {
-  	data: React.PropTypes.object.isRequired,	// doesn't five warning?g
+  	data: React.PropTypes.object.isRequired,	
 	};
 
 	constructor(props) {
@@ -13,20 +13,25 @@ class Tree extends Component {
 
     this.state = {
     	data: props.data,
-    	checked: 0,
-    	selectedFiles: []		// array of object
+    	checked: 0
     };
   }
 
   setRootStatus(id, status) {
-  	console.log('set rootStatus ', status)
+  	// console.log('set rootStatus ', status)
   	let newData = this.state.data;
   	newData.status = status;
   	this.setState({data: newData});
   }
 
+  printSelectedFileTree() {
+  	let dataCopy = JSON.parse(JSON.stringify(this.state.data));			// should exist better way to clone
+ 		let selectedTree = JSON.stringify(filterAllSelected(dataCopy, true));
+ 		console.log(selectedTree);
+  }
+
  	render() {
- 			console.log(filterSelected(this.state.data));
+ 			this.printSelectedFileTree();
  			return (
 	      <TreeNode 
 	      	className="treeRoot"
@@ -45,19 +50,56 @@ class Tree extends Component {
 	}
 }
 
+function filterAllSelected(node, rootFlag = false) {
+
+	if (rootFlag && node.status === 0) {				// if it is root and is unchecked
+		return {};
+	} else if (node.children != null && node.children.length > 0) {
+	  for (let i = 0; i < node.children.length; i++) {
+	    node.children[i] = filterAllSelected(node.children[i]);
+	  }
+	  return filterNode(node);
+	} else {
+		return node;
+	}
+}
+
+function filterNode(node) {  
+	let children = node.children;                             // current node doesn't change, only filter children
+	if (children != null && children.length !== 0) {
+
+		let filteredChildren = [];
+		for (let i = 0; i < children.length; i++) {
+			if (children[i].status !== 0) {
+				// console.log('children ', children[i].id, ' is checked!')
+				filteredChildren.push(children[i]);
+			}
+		}
+
+		console.log('filteredChildren: ', filteredChildren);
+		node.children = filteredChildren;
+	  return node;
+	}
+	else {
+		return node;
+	}
+}
+
+
+
 /*
 	input: { a: 1, b: 2, c: 3 }
 	const mapFunc = element => element * 2
 	output: { a: 2, b: 4, c: 6 }
 */
 
-const mapObj = (mapFunc, obj) =>
-	Object
-		.keys(obj) // [a, b, c]
-		.reduce((acc, key, index) => {
-			const value = obj[key];
-			return { ...acc, [key]: mapFunc(value) }
-		}, {});
+// const mapObj = (mapFunc, obj) =>
+// 	Object
+// 		.keys(obj) // [a, b, c]
+// 		.reduce((acc, key, index) => {
+// 			const value = obj[key];
+// 			return { ...acc, [key]: mapFunc(value) }
+// 		}, {});
 
 
 // Object.filter = function( obj, predicate) {
@@ -74,18 +116,18 @@ const mapObj = (mapFunc, obj) =>
 //     return result;
 // };
 
-function filterSelected(data) {
-	// if (data.children) {
-	// 	for (let i = 0; i < data.children.length; i++) {
-	// 		data.children[i] = filterSelected(data.children[i]);
-	// 	}
-	// }
-	// data = data.filter(child => {
-	// 	return child.status === 1;
-	// });
+// function filterAllSelected(data) {
+// 	// if (data.children) {
+// 	// 	for (let i = 0; i < data.children.length; i++) {
+// 	// 		data.children[i] = filterSelected(data.children[i]);
+// 	// 	}
+// 	// }
+// 	// data = data.filter(child => {
+// 	// 	return child.status === 1;
+// 	// });
 
-	return data;
-}
+// 	return data;
+// }
 
 class TreeNode extends Component {
 	static propTypes = {
@@ -128,7 +170,7 @@ class TreeNode extends Component {
   }
 
   setChildrenStatus = (id, status) => {									// recursively update all parent's children data
-  	console.log('set childrenStatus ', status)
+  	// console.log('set childrenStatus ', status)
 
   	let children = this.state.children;
   	if (children) {
@@ -229,7 +271,7 @@ class TreeNode extends Component {
 }
 
 function changeAllChildrenStatus(children, status) {											// set all current and lower children's status
-	console.log('set all childrenStatus ', status)
+	// console.log('set all childrenStatus ', status)
 
 	for (let i = 0; i < children.length; i++) {
 		if (children[i].children) {

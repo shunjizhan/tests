@@ -17,17 +17,28 @@ console.log('MAP OBJ', mapObj(mapFunc, input))
   output: { b: 2, d: 4 }
 */
 
-const filterObj = (filterFunc, obj) =>
-  Object
-		.keys(obj) // [a, b, c]
-		.reduce((acc, key, index) => {
-          const value = obj[key];
-          if (filterFunc(value))
-            return Object.assign(acc, { [key]: value  })
+function filterNode(node) {                               // current node doesn't change, only filter children
+  return Object.keys(node.children).reduce((acc, key, index) => {
+          const value = node.children.key;
+          if value.status !== 0
+            return Object.assign(acc, { [key]: tree  })
           else 
             return acc  
-		}, {});
+		}, {
+      "id": node.id,
+      "filename": node.filename,
+      "category": node.category,
+      "status": node.status,
+    });
+}
 
-const filterFunc = elem => (elem % 2) === 0;
+function filterAllSelected(node) {
+  if (node.children) {
+    for (let i = 0; i < node.children.length; i++) {
+      node.children[i] = filterNode(node.children[i]);
+    }
+  }
+  return filterNode(node);
+}
 
 console.log('FILTER OBJ', filterObj(filterFunc, input))

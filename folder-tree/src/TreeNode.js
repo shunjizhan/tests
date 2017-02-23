@@ -9,20 +9,22 @@ class Tree extends Component {
 	constructor(props) {
     super(props);
     this.setRootStatus = this.setRootStatus.bind(this);
+    // this.changeSelectedFiles = this.changeSelectedFiles.bind(this);
 
     this.state = {
     	data: props.data,
     	checked: 0,
-    	selectedFolders: []	// array of object
+    	selectedFiles: []		// array of object
     };
   }
 
   setRootStatus(id, status) {
-  	console.log('set rootStatus ', id)
+  	console.log('set rootStatus ', status)
   	this.setState({checked: status});
   }
 
  	render() {
+ 			filterSelected(this.state.data);
  			return (
 	      <TreeNode 
 	      	className="treeRoot"
@@ -41,7 +43,9 @@ class Tree extends Component {
 	}
 }
 
-
+function filterSelected(data) {
+	console.log(data);
+}
 
 class TreeNode extends Component {
 	static propTypes = {
@@ -58,7 +62,6 @@ class TreeNode extends Component {
     super(props);
     this.toggleFolder = this.toggleFolder.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
-    // this.changeAllChildrenStatus = this.changeAllChildrenStatus.bind(this);
 
     this.state = {
     	children: props.children,							// {status: 0, data: []}
@@ -67,16 +70,6 @@ class TreeNode extends Component {
       open: false
     };
   }
-
-  // componentDidMount() {
-  // 	this.changeAllChildrenStatus(this.props.checked);
-  // }
-
-  // componentWillReceiveProps(nextProps) {
-  // 	if (nextProps.checked === 1) {
-  // 		this.changeAllChildrenStatus(1);
-  // 	}
-  // }
 
   toggleFolder() {
   		this.setState(prevState => ({ open: !prevState.open }));
@@ -111,25 +104,26 @@ class TreeNode extends Component {
   }
 
   getCheckedStatus = (prevStatus) => {
-  	// const halfCheckedChildren = this.state.children.filter(child => {
-  	// 	return child.status === 0.5;
-  	// });
-
   	if (prevStatus === 0.5) {
   		return 0.5;
   	}
 
-  	const selectedChildren = this.state.children.filter(child => {
-  		// return child.status === 1 && child.category === 'folder';
-  		return child.status === 1;
-  	});
+  	let selectedChildrenSum = 0;
+  	for (let i = 0; i < this.state.children.length; i++) {
+  		selectedChildrenSum += this.state.children[i].status;
+  	}
 
-  	console.log('selectedChildren: ', selectedChildren.length)
+  	// const selectedChildren = this.state.children.filter(child => {
+  	// 	// return child.status === 1 && child.category === 'folder';
+  	// 	return child.status === 1;
+  	// });
+
+  	console.log('selectedChildrenSum: ', selectedChildrenSum)
 
   	// if (selectedChildren.length === getFolderNum(this.state.children)) {
-  	if (selectedChildren.length === this.state.children.length) {
+  	if (selectedChildrenSum === this.state.children.length) {
   		return 1;
-  	} else if (selectedChildren.length === 0) {
+  	} else if (selectedChildrenSum === 0) {
   		return 0;
   	} else {
   		return 0.5;
@@ -208,22 +202,13 @@ function changeAllChildrenStatus(children, status) {											// set all curren
  	return children;
 }
 
-function getFolderNum(array) {
-  	let count = 0;
-  	for (let i = 0; i < array.length; i++)
-  		if (array[i].category === 'folder')
-  			count++;
-  	return count;
-  }
-
-
-
-
-
-
-
-
-
+// function getFolderNum(array) {
+//   	let count = 0;
+//   	for (let i = 0; i < array.length; i++)
+//   		if (array[i].category === 'folder')
+//   			count++;
+//   	return count;
+//   }
 
 class Checkbox extends React.Component {
 	static propTypes = {
@@ -260,23 +245,5 @@ class Checkbox extends React.Component {
 		return <input type="checkbox" onChange={this.handleCheck} checked={this.props.status !== 1? false : true} ref={box => this.checkBox = box}/>
 	}
 }
-
-
-// function getStatusArray(n, status) {
-//   	let statusArray = [];
-//   	if (status === 0.5) {
-//   		for (let i = 0; i < n; i++) {
-// 	  		if (i === 0)
-// 	  			statusArray[i] = 0.5;
-// 	  		else
-// 	  			statusArray[i] = 0;	
-// 	  	}
-//   	} else {
-// 	  	for (let i = 0; i < n; i++) {
-// 	  		statusArray[i] = status;		// defult to unchecked
-// 	  	}
-// 	  }
-//   	return statusArray;
-//   }
 
 export default Tree;

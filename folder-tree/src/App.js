@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Tree from './TreeNode'
 import Tree from './TreeNode'
 
 var data = {
@@ -145,56 +144,24 @@ var data = {
 }
 
 class App extends Component {
-
-
-
   render() {
     return (
       <div className='folder-tree'>
         <Tree data={modify(data)} onChange={selectedFolders => console.log(selectedFolders)} />
       </div>
     )
-    // return <CheckBox status={0.5} handleCheck={ () => {} }/>
   }
 }
 
-  function modify(data) {
-    if (data.children) {
-      for (let i = 0; i < data.children.length; i++)
-        data[i] = modify(data.children[i]);
-    }
-
-    data.status = 0;
-
-    // console.log(data);
-    return data;
+function modify(data) {       // set all initial status to 0, which means unchecked
+  if (data.children) {
+    for (let i = 0; i < data.children.length; i++)
+      data.children[i] = modify(data.children[i]);
   }
+  data.status = 0;
 
-// const mapState = state => {
-//   return {
-//     table: state
-//   }
-// }
-
-// const mapDispatch = dispatch => {
-//   return {
-//     randomTable: () => {
-//       dispatch({ 
-//         type: 'randomTable', 
-//         // table: tableGen(rand(10) * 1.5 + 1, rand(10) + 1),
-//         table: tableGen(3,3)
-//       })
-//     },
-//     clearTable: () => {
-//       dispatch({
-//         type: 'clearTable'
-//       })
-//     }
-//   }
-// }
-
-// const Table = connect(mapState, mapDispatch)(App);
-// export default Table;
+  return data;
+}
 
 export default App;
 

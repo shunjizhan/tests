@@ -26,7 +26,7 @@ class Tree extends Component {
   }
 
  	render() {
- 			filterSelected(this.state.data);
+ 			console.log(filterSelected(this.state.data));
  			return (
 	      <TreeNode 
 	      	className="treeRoot"
@@ -45,8 +45,46 @@ class Tree extends Component {
 	}
 }
 
+/*
+	input: { a: 1, b: 2, c: 3 }
+	const mapFunc = element => element * 2
+	output: { a: 2, b: 4, c: 6 }
+*/
+
+const mapObj = (mapFunc, obj) =>
+	Object
+		.keys(obj) // [a, b, c]
+		.reduce((acc, key, index) => {
+			const value = obj[key];
+			return { ...acc, [key]: mapFunc(value) }
+		}, {});
+
+
+// Object.filter = function( obj, predicate) {
+//     var result = {}, key;
+//     // ---------------^---- as noted by @CMS, 
+//     //      always declare variables with the "var" keyword
+
+//     for (key in obj) {
+//         if (obj.hasOwnProperty(key) && !predicate(obj[key])) {
+//             result[key] = obj[key];
+//         }
+//     }
+
+//     return result;
+// };
+
 function filterSelected(data) {
-	console.log(data);
+	// if (data.children) {
+	// 	for (let i = 0; i < data.children.length; i++) {
+	// 		data.children[i] = filterSelected(data.children[i]);
+	// 	}
+	// }
+	// data = data.filter(child => {
+	// 	return child.status === 1;
+	// });
+
+	return data;
 }
 
 class TreeNode extends Component {
@@ -66,9 +104,9 @@ class TreeNode extends Component {
     this.handleCheck = this.handleCheck.bind(this);
 
     this.state = {
-    	children: props.children,							// {status: 0, data: []}
+    	children: props.children,							
     	level: props.level,
-    	checked: 0,
+    	// checked: 0,
       open: false
     };
   }
@@ -77,19 +115,19 @@ class TreeNode extends Component {
   		this.setState(prevState => ({ open: !prevState.open }));
   }
 
-  handleCheck(e) {																// handle this level's check
+  handleCheck(e) {																
   	if (e.target.checked) {
   		// console.log('setState 1');
   		this.props.setChildrenStatus(this.props.id, 1);
   		this.setState(changeAllChildrenStatus(this.state.children, 1));
   	}	else {
   		// console.log('setState 0');
-  		this.props.setChildrenStatus(this.props.id, 0);										// own check
+  		this.props.setChildrenStatus(this.props.id, 0);										// own and parent's check
   		this.setState(changeAllChildrenStatus(this.state.children, 0));		// children's check
   	}
   }
 
-  setChildrenStatus = (id, status) => {									// child use it to update its status
+  setChildrenStatus = (id, status) => {									// recursively update all parent's children data
   	console.log('set childrenStatus ', status)
 
   	let children = this.state.children;

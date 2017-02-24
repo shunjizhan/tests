@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tree from './TreeNode'
+import FolderTree from './FolderTree'
 
 var data = {
   "id": 1,
@@ -147,7 +147,7 @@ class App extends Component {
   render() {
     return (
       <div className='folder-tree'>
-        <Tree data={modify(data)} onChange={selectedFolders => console.log(selectedFolders)} />
+        <FolderTree data={modify(data)} onChange={selectedFolders => console.log(selectedFolders)} />
       </div>
     )
   }
